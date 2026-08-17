@@ -95,5 +95,6 @@ The opportunity therefore appears stronger at the operating, governance, evidenc
 - [`CONTEXT.md`](CONTEXT.md) - the current domain vocabulary.
 - [`docs/INTERVIEW.md`](docs/INTERVIEW.md) - the staged founder and product interview.
 - [`docs/COMPETITIVE-LANDSCAPE.md`](docs/COMPETITIVE-LANDSCAPE.md) - the public competitive scan and positioning hypotheses.
+- [`docs/PAID-PILOT.md`](docs/PAID-PILOT.md) - the first paid concierge offer and validation boundary.
 
 No architecture decision record exists yet because the product direction is still a working hypothesis.

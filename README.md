@@ -65,6 +65,14 @@ The working revenue cushion is approximately $150,000-$200,000 CAD/year in busin
 - Building a large autonomous swarm runtime before customer validation.
 - Choosing infrastructure, pricing, or a permanent architecture before the interview.
 
+## Parked future direction
+
+### Meta-harness
+
+A future higher-order layer could create, adapt, validate, and manage other harnesses.
+This is a parked business idea, not part of the first console wedge.
+Revisit it only after the initial buyer, paid problem, and concierge economics are validated.
+
 ## Provisional future stack
 
 If the interview supports a prototype, the provisional stack is a TypeScript/Next.js control plane, Postgres for durable run state, and a small Python worker or adapter service for agent execution.

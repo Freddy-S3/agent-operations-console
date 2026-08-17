@@ -6,6 +6,10 @@ This is a directional scan of public competitor positioning, offers, and visible
 
 It is not a complete market census, and competitor claims are treated as self-reported until independently verified.
 
+The competitor examples begin with Toronto and the GTA because that was the initial research area, while the intended first go-to-market scope is English-speaking Canada and the United States.
+
+Japan is a later localization and partnership lane because business-language readiness and local operating support still need to be developed.
+
 ## Legal and ethical boundary
 
 We can study public websites, public documentation, public pricing, public case studies, and common product patterns.
@@ -215,4 +219,3 @@ Recommended sequence:
 - [Autor](https://www.autor.ca/).
 - [Peligent](https://peligent.com/).
 - [Entuit](https://www.entuit.com/).
-

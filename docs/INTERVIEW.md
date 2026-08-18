@@ -1,6 +1,6 @@
 # Agent Operations Console Discovery Interview
 
-Status: Round 1 pending.
+Status: Round 1 complete; Round 2 pending.
 
 This is a staged interview for deciding whether the Agent Operations Console should become a real product.
 
@@ -40,7 +40,7 @@ Choose the target that should govern decisions.
 
 Recommended answer: approximately $100,000 CAD/year of personal pre-tax income after business costs, supported by at least $150,000-$200,000 CAD/year of business revenue.
 
-Answer:
+Answer: Approximately $100,000 CAD/year of personal pre-tax income.
 
 ### Q2. What is the target timeline?
 
@@ -48,7 +48,7 @@ When should the business plausibly replace the day-job income?
 
 Recommended answer: 12-18 months after the first serious validation effort begins.
 
-Answer:
+Answer: One year.
 
 ### Q3. How much founder time is available?
 
@@ -56,7 +56,7 @@ What weekly time can be spent on customer conversations, delivery, and product w
 
 Recommended answer: state a sustainable minimum and maximum rather than an aspirational number.
 
-Answer:
+Answer: A sustainable minimum of 20 hours per week and a maximum of 40 hours per week.
 
 ### Q4. What work are you willing to sell first?
 
@@ -64,7 +64,13 @@ Choose the acceptable starting posture: consulting, concierge pilot, software su
 
 Recommended answer: sell a narrow concierge pilot or implementation sprint, then convert repeated work into software.
 
-Answer:
+Answer: A narrow paid concierge pilot.
+
+### Round 1 decision
+
+The project is authorized to continue discovery within a one-year income horizon, with 20-40 founder hours available per week and a narrow paid concierge pilot as the initial commercial posture.
+
+The next decision is which buyer and painful, payable workflow should be tested before any product implementation.
 
 ## Round 2 - Customer and painful problem
 

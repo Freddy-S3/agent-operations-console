@@ -96,5 +96,6 @@ The opportunity therefore appears stronger at the operating, governance, evidenc
 - [`docs/INTERVIEW.md`](docs/INTERVIEW.md) - the staged founder and product interview.
 - [`docs/COMPETITIVE-LANDSCAPE.md`](docs/COMPETITIVE-LANDSCAPE.md) - the public competitive scan and positioning hypotheses.
 - [`docs/PAID-PILOT.md`](docs/PAID-PILOT.md) - the first paid concierge offer and validation boundary.
+- [`docs/DISCOVERY-OUTREACH-KIT.md`](docs/DISCOVERY-OUTREACH-KIT.md) - the buyer profile, target list, interview guide, outreach drafts, tracker, and evidence template for learning conversations.
 
 No architecture decision record exists yet because the product direction is still a working hypothesis.

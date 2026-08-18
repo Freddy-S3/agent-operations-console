@@ -42,6 +42,26 @@ The pilot includes:
 - A concise runbook covering startup, approval, intervention, recovery, and handoff.
 - Limited post-handoff support for fourteen days, subject to the agreed contract.
 
+## Candidate asynchronous extension
+
+For a suitable low-risk task class, the pilot may validate an asynchronous Jira intake workflow alongside the concierge delivery.
+
+When an eligible ticket reaches the agreed ready state, the restricted Faruk first pass prepares an initial implementation and opens a draft PR.
+
+The first pass may use a narrowly scoped bot identity to read the repository and create its isolated branch and draft PR, but it must not have broad engineer credentials, merge rights, deployment rights, or production access.
+
+The engineer tests and reviews the first draft before invoking the permissioned Freddy second pass for corrections or continuation.
+
+Completed tickets can feed a weekly documentation skill that updates the customer's Confluence or other documentation system through the relevant MCP server.
+
+This extension is intentionally bounded and experimental.
+
+The pilot should measure time from ticket readiness to draft PR, usable first-draft rate, engineer rework, review cycles, documentation coverage, and model cost per ticket.
+
+Model routing can use lower-cost models for ticket triage, context gathering, and routine first-pass work, reserving stronger models for difficult corrections, review findings, or recovery.
+
+The pilot should not claim that every ticket can be completed without engineering implementation work.
+
 The delivery is partly manual by design.
 
 Manual configuration and teaching are part of the value proposition, not an embarrassing temporary substitute for software.

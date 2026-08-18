@@ -2,7 +2,7 @@
 
 Discovery seed for a possible control plane that gives teams a usable UI for safe, auditable AI-agent software delivery.
 
-Status: discovery only.
+Status: discovery plus a local, dry-run workflow rehearsal.
 
 ## Why this exists
 
@@ -109,5 +109,14 @@ The opportunity therefore appears stronger at the operating, governance, evidenc
 - [`docs/COMPETITIVE-LANDSCAPE.md`](docs/COMPETITIVE-LANDSCAPE.md) - the public competitive scan and positioning hypotheses.
 - [`docs/PAID-PILOT.md`](docs/PAID-PILOT.md) - the first paid concierge offer and validation boundary.
 - [`docs/DISCOVERY-OUTREACH-KIT.md`](docs/DISCOVERY-OUTREACH-KIT.md) - the buyer profile, target list, interview guide, outreach drafts, tracker, and evidence template for learning conversations.
+- [`docs/LOCAL-PROTOTYPE.md`](docs/LOCAL-PROTOTYPE.md) - how to run the local Jira-to-operator-console rehearsal and where live integrations stop.
+
+## Local prototype
+
+The prototype is deliberately local-first and side-effect free.
+Run `npm test`, then `npm start`, and open `http://127.0.0.1:4310` to rehearse ticket intake, branch planning, environment preparation, human approval, evidence, and recovery with synthetic data.
+
+It does not claim to be a hosted SaaS product or a live Atlassian integration.
+Jira, Confluence, Bitbucket/Stash, model selection, cloud environments, and durable storage are explicit adapter seams so a paid pilot can determine the correct production boundaries.
 
 No architecture decision record exists yet because the product direction is still a working hypothesis.

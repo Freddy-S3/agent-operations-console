@@ -45,3 +45,15 @@ _Avoid_: Workspace, branch copy
 **Concierge Pilot**:
 A paid, partly manual delivery of the proposed workflow used to learn the customer problem before building general software.
 _Avoid_: Free trial, demo
+
+**Faruk First Pass**:
+A restricted execution mode that prepares an initial draft PR from an eligible Jira ticket without broad engineer, merge, deployment, or production permissions.
+_Avoid_: Autonomous production change
+
+**Freddy Second Pass**:
+An engineer-invoked, permissioned execution mode that revises or continues the initial draft after human testing and review.
+_Avoid_: Automatic approval
+
+**Automated Documentation**:
+A scheduled workflow that converts completed-ticket evidence into updates for a customer documentation system through an MCP server.
+_Avoid_: Unreviewed knowledge publication

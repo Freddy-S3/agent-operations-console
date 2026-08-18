@@ -41,6 +41,18 @@ Possible first-screen capabilities include:
 
 The first version should answer one question clearly: “What are my agents doing, what can I safely approve, and how do I recover when one fails?”
 
+### Asynchronous ticket acceleration
+
+A candidate service extension is an asynchronous Jira-to-draft-PR workflow for a bounded class of ready tickets.
+
+When a ticket reaches the agreed intake state, the restricted Faruk first pass prepares an initial implementation and opens a draft PR without broad engineer, merge, deployment, or production permissions.
+
+The engineer tests and reviews that draft, then invokes the permissioned Freddy second pass when the implementation needs correction or continuation.
+
+The weekly documentation skill can turn completed tickets and their delivery evidence into updates for Confluence or another customer documentation system through the relevant MCP server.
+
+This is a validation hypothesis, not a promise of autonomous delivery.
+
 ## Business goal
 
 The business should be a low-cost path toward approximately $100,000 CAD/year of personal pre-tax income, not a venture-scale company by default.

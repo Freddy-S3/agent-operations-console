@@ -28,3 +28,34 @@ export function sampleJiraWebhook() {
     },
   };
 }
+
+export function sampleHarnessDogfoodWebhook() {
+  return {
+    issue: {
+      id: "20001",
+      key: "HARNESS-117",
+      fields: {
+        project: { key: "HARNESS" },
+        summary: "Verify queue dashboard blocker visibility after a formatter change",
+        description: "Use a sanitized queue-dashboard workflow to prove that blockers remain visible, options render as phone actions, and a failed verification pass can be resumed with the same evidence bundle.",
+        status: { name: "Ready for Agent" },
+        issuetype: { name: "Task" },
+        priority: { name: "Medium" },
+        labels: ["agent-ready", "dogfood", "reliability"],
+      },
+    },
+    repository: {
+      provider: "github",
+      host: "https://github.com",
+      projectKey: "HARNESS",
+      slug: "agent-agnostic-harness",
+      defaultBranch: "main",
+      developmentBranch: null,
+      releaseBranch: null,
+    },
+    confluence: {
+      spaceKey: "OPS",
+      parentPageId: "dogfood-evidence",
+    },
+  };
+}

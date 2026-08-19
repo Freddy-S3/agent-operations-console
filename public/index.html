@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A local rehearsal of a safe, auditable agent operations workflow.">
+    <title>Agent Operations Console</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Agent Operations Console home">
+        <span class="brand-mark" aria-hidden="true">AO</span>
+        <span>Agent Operations Console</span>
+      </a>
+      <div class="topbar-actions">
+        <span class="mode-pill"><span class="status-dot"></span> Local rehearsal</span>
+        <span id="feedback" class="feedback" aria-live="polite">Ready</span>
+        <button class="button button-secondary" data-action="refresh">Refresh</button>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="intro">
+        <div>
+          <p class="eyebrow">Operator control plane / first vertical slice</p>
+          <h1>Make agent-assisted delivery recoverable.</h1>
+          <p class="intro-copy">A Jira ticket enters through an explicit intake boundary, gets a branch recommendation and isolated environment, then waits for a human gate before the restricted first pass.</p>
+        </div>
+        <div class="intro-actions">
+          <button class="button button-primary" data-action="ingest">Ingest sample Jira ticket</button>
+          <p class="microcopy">Synthetic PAY-142. No cloud, repository, or model side effects.</p>
+        </div>
+      </section>
+
+      <section class="metrics" aria-label="Run metrics">
+        <article class="metric-card"><span>Runs</span><strong id="metric-runs">0</strong><small>tracked in this rehearsal</small></article>
+        <article class="metric-card"><span>Human gates</span><strong id="metric-gates">0</strong><small>waiting for an operator</small></article>
+        <article class="metric-card"><span>Recovered</span><strong id="metric-recovered">0</strong><small>runs with preserved context</small></article>
+        <article class="metric-card"><span>Evidence</span><strong id="metric-evidence">0</strong><small>records attached to runs</small></article>
+      </section>
+
+      <section class="workspace">
+        <aside class="panel run-panel">
+          <div class="panel-heading">
+            <div><p class="eyebrow">Work queue</p><h2>Agent runs</h2></div>
+            <span id="run-count" class="count-badge">0</span>
+          </div>
+          <div id="run-list" class="run-list" aria-live="polite">
+            <div class="empty-state"><span class="empty-icon">+</span><strong>No runs yet</strong><p>Ingest the synthetic ticket to rehearse the workflow.</p></div>
+          </div>
+        </aside>
+
+        <section class="panel detail-panel" aria-live="polite">
+          <div id="run-detail">
+            <div class="detail-empty"><p class="eyebrow">Selected run</p><h2>Choose a run to inspect its evidence</h2><p>The detail view will show the ticket, branch decision, environment, human gate, and recovery trail.</p></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="integration-strip">
+        <div class="section-heading"><p class="eyebrow">Integration boundary</p><h2>Provider-neutral by design</h2><p>The first slice keeps customer systems outside the core workflow and gives each one a replaceable adapter.</p></div>
+        <div class="integration-grid">
+          <article class="integration-card"><span class="integration-icon">J</span><div><strong>Atlassian Jira</strong><p>Signed webhook intake and ticket normalization.</p></div><span class="adapter-status">adapter</span></article>
+          <article class="integration-card"><span class="integration-icon">C</span><div><strong>Confluence</strong><p>Evidence bundle can become a reviewable draft page.</p></div><span class="adapter-status">adapter</span></article>
+          <article class="integration-card"><span class="integration-icon">B</span><div><strong>Bitbucket / Stash</strong><p>Repository and branch context stays customer-owned.</p></div><span class="adapter-status">adapter</span></article>
+          <article class="integration-card"><span class="integration-icon">AI</span><div><strong>Client-selected model</strong><p>Branch advice is a seam, with rules as the safe fallback.</p></div><span class="adapter-status">seam</span></article>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

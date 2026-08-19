@@ -1,6 +1,6 @@
 # Agent Operations Console Discovery Interview
 
-Status: Round 1 pending.
+Status: Round 2 provisionally answered; Round 3 remains blocked on customer evidence.
 
 This is a staged interview for deciding whether the Agent Operations Console should become a real product.
 
@@ -40,7 +40,7 @@ Choose the target that should govern decisions.
 
 Recommended answer: approximately $100,000 CAD/year of personal pre-tax income after business costs, supported by at least $150,000-$200,000 CAD/year of business revenue.
 
-Answer:
+Answer: Approximately $100,000 CAD/year of personal pre-tax income.
 
 ### Q2. What is the target timeline?
 
@@ -48,7 +48,7 @@ When should the business plausibly replace the day-job income?
 
 Recommended answer: 12-18 months after the first serious validation effort begins.
 
-Answer:
+Answer: One year.
 
 ### Q3. How much founder time is available?
 
@@ -56,7 +56,7 @@ What weekly time can be spent on customer conversations, delivery, and product w
 
 Recommended answer: state a sustainable minimum and maximum rather than an aspirational number.
 
-Answer:
+Answer: A sustainable minimum of 20 hours per week and a maximum of 40 hours per week.
 
 ### Q4. What work are you willing to sell first?
 
@@ -64,7 +64,13 @@ Choose the acceptable starting posture: consulting, concierge pilot, software su
 
 Recommended answer: sell a narrow concierge pilot or implementation sprint, then convert repeated work into software.
 
-Answer:
+Answer: A narrow paid concierge pilot.
+
+### Round 1 decision
+
+The project is authorized to continue discovery within a one-year income horizon, with 20-40 founder hours available per week and a narrow paid concierge pilot as the initial commercial posture.
+
+The next decision is which buyer and painful, payable workflow should be tested before any product implementation.
 
 ## Round 2 - Customer and painful problem
 
@@ -76,7 +82,8 @@ Choose one narrow starting group: small software teams building agent products, 
 
 Recommended answer: small software teams and AI consultancies with active agent workflows.
 
-Answer:
+Answer: 5-20 person software product teams that already use coding agents in English-speaking Canada and the United States.
+AI consultancies stay as a secondary interview segment and possible partner channel, not the first direct buyer.
 
 ### Q6. Who feels the pain and who pays?
 
@@ -84,7 +91,8 @@ Name the person who experiences the operational pain and the person who can appr
 
 Recommended answer: an engineering leader or consultancy owner who is accountable for delivery quality and team throughput.
 
-Answer:
+Answer: The person feeling the pain is the engineering leader, technical founder, staff engineer, or delivery owner who has to make agent-assisted work reliable enough for real code review.
+The person who pays is usually the technical founder, head of engineering, engineering manager, or consultancy owner accountable for delivery quality, team throughput, and client risk.
 
 ### Q7. Which problem is expensive enough to buy away?
 
@@ -92,7 +100,8 @@ Choose the strongest current hypothesis: starting agent work, coordinating paral
 
 Recommended answer: recovering and proving multi-agent work, because silent failure and unverifiable output create direct delivery risk.
 
-Answer:
+Answer: Recovering and proving agent-assisted work is the first painful problem to test.
+The expensive failure mode is not that agents cannot start work; it is that parallel or interrupted agent work becomes hard to trust, hard to review, hard to resume, or hard to explain to another engineer.
 
 ### Q8. What existing workaround will the product replace?
 
@@ -100,7 +109,16 @@ Name the current combination of chats, scripts, tickets, terminals, dashboards, 
 
 Recommended answer: identify the real workaround before designing a new navigation model.
 
-Answer:
+Answer: The current workaround is a fragile mix of chat transcripts, terminal scrollback, pull-request comments, local scripts, ad hoc checklists, manual git worktree hygiene, and human memory.
+The first customer interviews should confirm whether teams already maintain similar informal runbooks, status docs, approval rituals, or recovery habits around coding agents.
+
+### Round 2 decision
+
+The first buyer hypothesis is a small software product team already using coding agents, with the engineering leader or technical founder as the economic buyer.
+
+The first paid problem hypothesis is making agent-assisted repository work recoverable, reviewable, and safe to approve.
+
+The next decision is the product boundary for a concierge-supported workflow, but that boundary should be informed by customer conversations before implementation.
 
 ## Round 3 - Product boundary
 

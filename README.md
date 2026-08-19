@@ -2,7 +2,7 @@
 
 Discovery seed for a possible control plane that gives teams a usable UI for safe, auditable AI-agent software delivery.
 
-Status: discovery plus a local, dry-run workflow rehearsal.
+Status: Round 2 discovery hypothesis plus a local, dry-run workflow rehearsal.
 
 ## Why this exists
 
@@ -22,7 +22,9 @@ Swarm behavior is an implementation technique; the customer value is lower rewor
 
 ## Initial customer hypothesis
 
-The first likely customers are small software teams and AI consultancies that are actively using coding or workflow agents but lack reliable operating practices around them.
+The first likely customers are 5-20 person software product teams in English-speaking Canada and the United States that are actively using coding agents but lack reliable operating practices around them.
+
+AI consultancies remain a secondary interview segment and possible partner channel.
 
 This is a hypothesis to test, not a settled market decision.
 

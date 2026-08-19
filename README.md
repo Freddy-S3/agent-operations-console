@@ -110,6 +110,7 @@ The opportunity therefore appears stronger at the operating, governance, evidenc
 - [`docs/PAID-PILOT.md`](docs/PAID-PILOT.md) - the first paid concierge offer and validation boundary.
 - [`docs/DISCOVERY-OUTREACH-KIT.md`](docs/DISCOVERY-OUTREACH-KIT.md) - the buyer profile, target list, interview guide, outreach drafts, tracker, and evidence template for learning conversations.
 - [`docs/LOCAL-PROTOTYPE.md`](docs/LOCAL-PROTOTYPE.md) - how to run the local Jira-to-operator-console rehearsal and where live integrations stop.
+- [`docs/DOGFOOD-FIRST-CLIENT.md`](docs/DOGFOOD-FIRST-CLIENT.md) - the first-client rehearsal using Faruk's own agent-workflow reliability problem.
 
 ## Local prototype
 

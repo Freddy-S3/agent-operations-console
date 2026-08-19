@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
 import { test } from "node:test";
-import { sampleJiraWebhook } from "../src/demo.js";
+import { sampleHarnessDogfoodWebhook, sampleJiraWebhook } from "../src/demo.js";
 import { RUN_STATUS, normalizeJiraIssue } from "../src/domain.js";
 import { AtlassianHttpAdapter, DryRunEnvironmentProvider, MemoryRunStore, RulesBasedBranchAdvisor } from "../src/adapters.js";
 import { AgentOperationsOrchestrator } from "../src/orchestrator.js";
@@ -94,4 +94,27 @@ test("requires approval, then records execution, failure, recovery, and completi
   assert.equal(completed.status, RUN_STATUS.COMPLETED);
   assert.ok(completed.evidence.some((item) => item.type === "recovery"));
   assert.ok(completed.evidence.some((item) => item.type === "completion"));
+});
+
+test("rehearses Faruk first-client workflow with sanitized harness data", async () => {
+  const orchestrator = createOrchestrator();
+  const created = await orchestrator.ingestJiraWebhook(sampleHarnessDogfoodWebhook());
+  assert.equal(created.accepted, true);
+  assert.equal(created.run.ticket.key, "HARNESS-117");
+  assert.equal(created.run.ticket.repository.slug, "agent-agnostic-harness");
+  assert.equal(created.run.status, RUN_STATUS.AWAITING_APPROVAL);
+
+  orchestrator.approve(created.run.id, "Faruk");
+  orchestrator.execute(created.run.id);
+  orchestrator.fail(created.run.id, "Simulated regression: blocked item did not render phone-safe options.");
+  const recovered = await orchestrator.recover(created.run.id);
+  assert.equal(recovered.status, RUN_STATUS.RECOVERED);
+  assert.ok(recovered.evidence.some((item) => item.type === "recovery"));
+
+  orchestrator.execute(created.run.id);
+  const completed = orchestrator.complete(created.run.id);
+  assert.equal(completed.status, RUN_STATUS.COMPLETED);
+  assert.equal(completed.failure, null);
+  assert.ok(completed.events.some((event) => event.type === "run.recovery_started"));
+  assert.ok(completed.evidence.length >= 7);
 });

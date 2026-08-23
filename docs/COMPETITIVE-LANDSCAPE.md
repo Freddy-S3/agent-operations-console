@@ -65,6 +65,12 @@ Rovo Dev is also available through a CLI and IDE integrations.
 Atlassian describes the CLI as able to understand codebases, generate code and documentation, assist with tests and debugging, and connect to Jira, Confluence, and Bitbucket through MCP.
 [Rovo Dev CLI](https://www.atlassian.com/blog/blog/announcements/rovo-dev-command-line-interface)
 
+Rovo Dev is not an unrestricted bring-your-own-agent execution layer.
+Atlassian says Rovo Dev uses hosted LLMs from providers including Anthropic and OpenAI.
+The Jira coding experience currently defaults to Claude Sonnet 4.6, while the CLI exposes a selectable catalog of supported models through `/models` and applies different credit multipliers.
+The reviewed Atlassian documentation does not establish arbitrary customer model routing or support for any client-selected private model.
+[Rovo Dev FAQ](https://www.atlassian.com/software/rovo-dev), [Rovo Dev in Jira model guidance](https://community.atlassian.com/forums/Rovo-for-Software-Teams-Beta/Webinar-Q-amp-A-Rovo-Dev-in-Jira/ba-p/3215401), and [Rovo Dev CLI model selection](https://support.atlassian.com/rovo/docs/switch-between-large-language-models-in-rovo-dev-cli/)
+
 ### What Jira itself can already do
 
 Jira has several integration primitives that can look like coding automation even without Rovo Dev.
@@ -99,7 +105,7 @@ That last sentence is an inference from the documented scope of the primitives, 
 | Multiple agent sessions | Rovo Dev in Jira says users can orchestrate multiple cloud sessions from a Jira work item. | We need a sharper reason to exist than “run several agents.” |
 | Human control | Atlassian describes users reviewing plans and progress and approving changes before shipping. | Approval gates alone are not enough differentiation. |
 | Cross-provider operation | Jira supports multiple development tools, and Rovo MCP exposes several Atlassian products and some connected tools. | A truly provider-neutral control plane remains a possible opening, but this is an inference and must be tested with buyers. |
-| Client-selected AI provider | Atlassian documents third-party hosted models for Rovo Dev and future model choice, but the reviewed sources do not establish arbitrary customer model routing. | A model-provider adapter boundary may still matter. |
+| Client-selected AI provider | Rovo Dev uses Atlassian's supported hosted-model catalog, defaults to Claude Sonnet 4.6 in the Jira coding experience, and allows model selection in the CLI. The reviewed sources do not establish arbitrary customer model routing or bring-your-own private models. | A model-provider adapter boundary is a concrete potential differentiator. |
 | Durable evidence and recovery | The reviewed official sources describe plans, code, reviews, automation, and permissions, but I found no authoritative description of a portable failed-run recovery and evidence bundle. | This is a candidate gap, not a confirmed absence. |
 | Atlassian-native context | Rovo and Rovo Dev use Atlassian's connected knowledge and Teamwork Graph context. | Atlassian has a strong context advantage inside its ecosystem. |
 
@@ -126,6 +132,7 @@ The initial differentiator should therefore be “safe, recoverable, reviewable 
 4. Make the evidence bundle and recovery path first-class product concepts.
 5. Add a Rovo Dev adapter to the future provider matrix instead of assuming it must be defeated or ignored.
 6. Validate the differentiator against one low-risk personal workflow before purchasing Rovo Dev or adding more Atlassian products.
+7. Keep execution-agent and model-provider selection outside the core workflow so Rovo Dev can be one adapter alongside Claude Code, Codex, GitHub Copilot, or a client-approved internal agent.
 
 ### Current access and pricing caveat
 
@@ -150,6 +157,9 @@ We do not need to upgrade the sandbox just to validate the product thesis.
 | Jira development integrations can create branches, commits, and pull requests. | [Configure development tools](https://support.atlassian.com/jira-software-cloud/docs/configure-development-tools/) | Confirmed |
 | Forge can bridge Jira to external systems and custom automation. | [Building integrations with Forge](https://developer.atlassian.com/platform/forge/building-integrations/) | Confirmed |
 | Rovo Dev is a direct competitor to the coding-worker portion of this concept. | Combined product claims above and our current product scope. | Inferred |
+| Rovo Dev uses hosted models from providers including Anthropic and OpenAI. | [Rovo Dev FAQ](https://www.atlassian.com/software/rovo-dev) | Confirmed |
+| Rovo Dev in Jira currently defaults to Claude Sonnet 4.6, while the CLI exposes several selectable supported models. | [Rovo Dev in Jira model guidance](https://community.atlassian.com/forums/Rovo-for-Software-Teams-Beta/Webinar-Q-amp-A-Rovo-Dev-in-Jira/ba-p/3215401) and [Rovo Dev CLI model selection](https://support.atlassian.com/rovo/docs/switch-between-large-language-models-in-rovo-dev-cli/) | Confirmed |
+| Rovo Dev is not documented as an arbitrary bring-your-own-model execution layer. | Reviewed [Rovo Dev FAQ](https://www.atlassian.com/software/rovo-dev), [Rovo Dev in Jira model guidance](https://community.atlassian.com/forums/Rovo-for-Software-Teams-Beta/Webinar-Q-amp-A-Rovo-Dev-in-Jira/ba-p/3215401), and [Rovo Dev CLI model selection](https://support.atlassian.com/rovo/docs/switch-between-large-language-models-in-rovo-dev-cli/) | Unverified absence; treat as a product constraint until Atlassian documents otherwise |
 | Portable recovery and evidence are an open competitive gap. | No matching capability found in the reviewed official sources. | Unverified; requires broader research |
 | Rovo Dev or Rovo is included in the current Jira Free sandbox. | Current public pricing and plan documentation does not establish this. | Unverified; do not assume access |
 
@@ -346,3 +356,4 @@ Recommended sequence:
 - [Jira webhooks](https://support.atlassian.com/jira-cloud-administration/docs/manage-webhooks/).
 - [Jira Automation actions](https://support.atlassian.com/cloud-automation/docs/jira-automation-actions/).
 - [Atlassian Rovo MCP](https://developer.atlassian.com/cloud/rovo-mcp/).
+- [Rovo Dev model selection](https://support.atlassian.com/rovo/docs/switch-between-large-language-models-in-rovo-dev-cli/).

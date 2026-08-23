@@ -5,6 +5,7 @@ import { createServer as createHttpServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { AgentOperationsOrchestrator } from "./orchestrator.js";
+import { readRuntimeConfig } from "./config.js";
 import { sampleJiraWebhook } from "./demo.js";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -40,6 +41,10 @@ export function verifyWebhookSignature(rawBody, signature, secret) {
   const expectedBuffer = Buffer.from(expected, "utf8");
   const actualBuffer = Buffer.from(actual, "utf8");
   return expectedBuffer.length === actualBuffer.length && timingSafeEqual(expectedBuffer, actualBuffer);
+}
+
+export function webhookSignatureFromHeaders(headers) {
+  return headers["x-hub-signature"] ?? headers["x-agent-operations-signature"] ?? null;
 }
 
 async function serveStatic(request, response) {
@@ -82,7 +87,7 @@ export function createServer({
       defaultBranch: "main",
     },
   }),
-  webhookSecret = process.env.WEBHOOK_SECRET ?? "local-demo-secret",
+  webhookSecret = readRuntimeConfig().webhookSecret,
 } = {}) {
   return createHttpServer(async (request, response) => {
     try {
@@ -125,7 +130,7 @@ export function createServer({
       }
       if (request.method === "POST" && url.pathname === "/api/hooks/jira") {
         const raw = await body(request);
-        if (!verifyWebhookSignature(raw, request.headers["x-agent-operations-signature"], webhookSecret)) {
+        if (!verifyWebhookSignature(raw, webhookSignatureFromHeaders(request.headers), webhookSecret)) {
           json(response, 401, { error: "Invalid webhook signature" });
           return;
         }

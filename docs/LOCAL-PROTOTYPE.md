@@ -28,3 +28,17 @@ The provider seams are intentionally explicit:
 
 No live Atlassian, repository, model, cloud, draft-PR, or Confluence side effect is enabled by this prototype.
 The next production decision should follow a paid-pilot workflow and define the customer's authentication, data residency, repository permission, cloud provider, and model-client boundaries before replacing these adapters.
+
+## Local Atlassian credential setup
+
+The repository includes [`.env.example`](../.env.example) as the local configuration template.
+Copy it to `.env` and paste the Atlassian API token into `ATLASSIAN_API_TOKEN`.
+The `.env` file is gitignored and must never be pasted into chat or committed.
+Use the Atlassian site root for both `JIRA_BASE_URL` and `CONFLUENCE_BASE_URL`; the Confluence adapter adds its `/wiki` API path.
+
+The current adapter supports direct Jira and Confluence Cloud requests with `ATLASSIAN_EMAIL` plus `ATLASSIAN_API_TOKEN` using HTTP Basic authentication.
+For this direct-site adapter, use a short-lived classic API token; scoped tokens require the Atlassian API gateway path, which is not wired into this dry-run prototype yet.
+Jira Cloud admin webhooks are verified with the `X-Hub-Signature` HMAC header.
+The local prototype header remains accepted for existing rehearsal tests.
+
+The adapter is still not invoked by the dry-run workflow, so adding credentials does not create Jira issues, repository branches, cloud environments, or Confluence pages.

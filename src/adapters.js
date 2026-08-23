@@ -131,20 +131,35 @@ export class DryRunEnvironmentProvider {
 }
 
 export class AtlassianHttpAdapter {
-  constructor({ baseUrl, jiraBaseUrl, confluenceBaseUrl, bitbucketBaseUrl, token, fetchImpl = globalThis.fetch } = {}) {
+  constructor({ baseUrl, jiraBaseUrl, confluenceBaseUrl, bitbucketBaseUrl, email, token, authMode, fetchImpl = globalThis.fetch } = {}) {
     this.baseUrls = {
       jira: (jiraBaseUrl ?? baseUrl)?.replace(/\/$/, "") ?? null,
       confluence: (confluenceBaseUrl ?? baseUrl)?.replace(/\/$/, "") ?? null,
       bitbucket: (bitbucketBaseUrl ?? baseUrl)?.replace(/\/$/, "") ?? null,
     };
+    this.email = email ?? null;
     this.token = token ?? null;
+    this.authMode = authMode ?? (this.email ? "basic" : "bearer");
     this.fetchImpl = fetchImpl;
   }
 
   #assertConfigured(baseUrl) {
     if (!baseUrl || !this.token) {
-      throw new Error("Atlassian adapter requires a provider base URL and ATLASSIAN_TOKEN.");
+      throw new Error("Atlassian adapter requires a provider base URL and ATLASSIAN_API_TOKEN.");
     }
+    if (this.authMode === "basic" && !this.email) {
+      throw new Error("Basic Atlassian Cloud authentication requires ATLASSIAN_EMAIL.");
+    }
+    if (this.authMode !== "basic" && this.authMode !== "bearer") {
+      throw new Error(`Unsupported Atlassian authentication mode: ${this.authMode}.`);
+    }
+  }
+
+  #authorizationHeader() {
+    if (this.authMode === "basic") {
+      return `Basic ${Buffer.from(`${this.email}:${this.token}`, "utf8").toString("base64")}`;
+    }
+    return `Bearer ${this.token}`;
   }
 
   async #request(baseUrl, path, options = {}) {
@@ -153,7 +168,7 @@ export class AtlassianHttpAdapter {
       ...options,
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${this.token}`,
+        Authorization: this.#authorizationHeader(),
         ...options.headers,
       },
     });

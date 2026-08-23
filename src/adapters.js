@@ -28,6 +28,27 @@ export class MemoryRunStore {
   }
 }
 
+export class MemoryAuditEventStore {
+  #events = new Map();
+
+  append(event) {
+    if (!event?.eventId) throw new Error("Audit events require an eventId.");
+    if (!this.#events.has(event.eventId)) this.#events.set(event.eventId, structuredClone(event));
+    return structuredClone(this.#events.get(event.eventId));
+  }
+
+  list({ runId } = {}) {
+    return [...this.#events.values()]
+      .filter((event) => !runId || event.runId === runId)
+      .sort((left, right) => left.at.localeCompare(right.at) || left.eventId.localeCompare(right.eventId))
+      .map((event) => structuredClone(event));
+  }
+
+  clear() {
+    this.#events.clear();
+  }
+}
+
 export class RulesBasedBranchAdvisor {
   async recommend(ticket) {
     const repository = ticket.repository;

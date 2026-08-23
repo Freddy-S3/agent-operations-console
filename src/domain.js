@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { createAuditEvent } from "./logging.js";
 
 export const RUN_STATUS = Object.freeze({
   RECEIVED: "received",
@@ -26,6 +27,32 @@ const TRANSITIONS = Object.freeze({
 
 function timestamp(clock) {
   return clock().toISOString();
+}
+
+function appendEvent(run, type, detail, {
+  clock = () => new Date(),
+  actor = { type: "system", id: null },
+  severity = "info",
+  metadata = {},
+} = {}) {
+  const at = timestamp(clock);
+  const causationId = run.events.at(-1)?.eventId ?? null;
+  const event = createAuditEvent({
+    type,
+    at,
+    runId: run.id,
+    correlationId: run.correlationId ?? run.id,
+    causationId,
+    actor,
+    severity,
+    detail,
+    metadata,
+  });
+  return {
+    ...run,
+    updatedAt: at,
+    events: [...run.events, event],
+  };
 }
 
 function asArray(value) {
@@ -86,25 +113,24 @@ export function isEligibleTicket(ticket, requiredLabel = "agent-ready") {
   return ticket.labels.some((label) => label.toLowerCase() === requiredLabel.toLowerCase());
 }
 
-export function createRun(ticket, { idFactory = randomUUID, clock = () => new Date() } = {}) {
+export function createRun(ticket, { idFactory = randomUUID, clock = () => new Date(), correlationId = null } = {}) {
   const createdAt = timestamp(clock);
-  return {
-    id: idFactory(),
+  const id = idFactory();
+  const run = {
+    id,
+    correlationId: correlationId ?? id,
     status: RUN_STATUS.RECEIVED,
     ticket,
     branchRecommendation: null,
     environment: null,
     evidence: [],
-    events: [{
-      type: "ticket.received",
-      at: createdAt,
-      detail: `${ticket.key} entered the agent-ready intake path.`,
-    }],
+    events: [],
     failure: null,
     approval: null,
     createdAt,
     updatedAt: createdAt,
   };
+  return appendEvent(run, "ticket.received", `${ticket.key} entered the agent-ready intake path.`, { clock });
 }
 
 export function transitionRun(run, nextStatus, detail, { clock = () => new Date() } = {}) {
@@ -114,73 +140,61 @@ export function transitionRun(run, nextStatus, detail, { clock = () => new Date(
   if (!TRANSITIONS[run.status].includes(nextStatus)) {
     throw new Error(`Cannot transition run from ${run.status} to ${nextStatus}`);
   }
-  const at = timestamp(clock);
-  return {
-    ...run,
-    status: nextStatus,
-    updatedAt: at,
-    events: [...run.events, { type: `run.${nextStatus}`, at, detail }],
-  };
+  const nextRun = { ...run, status: nextStatus };
+  return appendEvent(nextRun, `run.${nextStatus}`, detail, {
+    clock,
+    metadata: { fromStatus: run.status, toStatus: nextStatus },
+  });
 }
 
-export function recordEvent(run, type, detail, { clock = () => new Date() } = {}) {
-  const at = timestamp(clock);
-  return {
-    ...run,
-    updatedAt: at,
-    events: [...run.events, { type, at, detail }],
-  };
+export function recordEvent(run, type, detail, options = {}) {
+  return appendEvent(run, type, detail, options);
 }
 
 export function addEvidence(run, evidence, { clock = () => new Date() } = {}) {
   const at = timestamp(clock);
-  return {
+  const nextRun = {
     ...run,
-    updatedAt: at,
     evidence: [...run.evidence, { ...evidence, at }],
-    events: [...run.events, {
-      type: "evidence.recorded",
-      at,
-      detail: evidence.label,
-    }],
   };
+  return appendEvent(nextRun, "evidence.recorded", evidence.label, {
+    clock,
+    metadata: { evidenceType: evidence.type },
+  });
 }
 
 export function setApproval(run, operator, { clock = () => new Date() } = {}) {
   const at = timestamp(clock);
-  return {
+  const nextRun = {
     ...run,
-    updatedAt: at,
     approval: { operator, at },
-    events: [...run.events, {
-      type: "approval.granted",
-      at,
-      detail: `${operator} approved the bounded first pass.`,
-    }],
   };
+  return appendEvent(nextRun, "approval.granted", `${operator} approved the bounded first pass.`, {
+    clock,
+    actor: { type: "operator", id: operator },
+  });
 }
 
 export function setFailure(run, reason, { clock = () => new Date() } = {}) {
   const at = timestamp(clock);
-  return {
+  const nextRun = {
     ...run,
     updatedAt: at,
     failure: { reason, at },
   };
+  return appendEvent(nextRun, "run.failure_recorded", "The worker failure was recorded.", {
+    clock,
+    severity: "error",
+    metadata: { hasReason: Boolean(reason) },
+  });
 }
 
 export function clearFailure(run, { clock = () => new Date() } = {}) {
-  const at = timestamp(clock);
-  return {
+  const nextRun = {
     ...run,
-    updatedAt: at,
     failure: null,
-    events: [...run.events, {
-      type: "run.recovery_started",
-      at,
-      detail: "The operator resumed the run from its preserved environment and evidence.",
-    }],
   };
+  return appendEvent(nextRun, "run.recovery_started", "The operator resumed the run from its preserved environment and evidence.", { clock });
 }
 
 export function listTransitions(status) {

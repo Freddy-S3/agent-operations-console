@@ -11,6 +11,14 @@ npm start
 
 Then open `http://127.0.0.1:4310` and ingest the synthetic `PAY-142` ticket.
 
+The local console is organized around the operator's path:
+
+- `Runs` shows the queue, branch and worktree decisions, approval gate, evidence, recovery trail, and engineer handoff.
+- `Playbook` explains the Faruk first pass and the boundary between automatic preparation and engineer-owned review.
+- `Connections` makes the Jira, repository, Confluence, and model adapter seams explicit.
+
+The controls are deliberately rehearsal-only: intake, approval, execution, failure, recovery, completion, search, filters, and reset all operate against the in-memory dry-run API.
+
 The rehearsal demonstrates this sequence:
 
 1. A Jira-shaped webhook is normalized and admitted only when it has the `agent-ready` label.

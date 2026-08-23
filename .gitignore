@@ -1,5 +1,7 @@
 node_modules/
 .scratch/renders/
+.scratch/audit-events.jsonl
 .env
 .env.*
 !.env.example
+status/

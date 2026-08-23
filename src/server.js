@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from "node:crypto";
+import { createHmac, randomUUID, timingSafeEqual } from "node:crypto";
 import { createReadStream } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { createServer as createHttpServer } from "node:http";
@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import { AgentOperationsOrchestrator } from "./orchestrator.js";
 import { readRuntimeConfig } from "./config.js";
 import { sampleJiraWebhook } from "./demo.js";
+import { createLogger } from "./logging.js";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const PUBLIC = join(ROOT, "public");
@@ -31,6 +32,13 @@ async function body(request) {
     chunks.push(chunk);
   }
   return Buffer.concat(chunks);
+}
+
+function requestIdFor(request) {
+  const candidate = request.headers["x-correlation-id"];
+  return typeof candidate === "string" && /^[A-Za-z0-9._:-]{1,128}$/.test(candidate)
+    ? candidate
+    : randomUUID();
 }
 
 export function verifyWebhookSignature(rawBody, signature, secret) {
@@ -65,13 +73,13 @@ async function serveStatic(request, response) {
   }
 }
 
-function actionFor(orchestrator, id, action, payload) {
+function actionFor(orchestrator, id, action, payload, requestId) {
   switch (action) {
-    case "approve": return orchestrator.approve(id, payload?.operator ?? "operator");
-    case "execute": return orchestrator.execute(id);
-    case "fail": return orchestrator.fail(id, payload?.reason);
-    case "recover": return orchestrator.recover(id);
-    case "complete": return orchestrator.complete(id);
+    case "approve": return orchestrator.approve(id, payload?.operator ?? "operator", { requestId });
+    case "execute": return orchestrator.execute(id, { requestId });
+    case "fail": return orchestrator.fail(id, payload?.reason, { requestId });
+    case "recover": return orchestrator.recover(id, { requestId });
+    case "complete": return orchestrator.complete(id, { requestId });
     default: {
       const error = new Error(`Unsupported run action: ${action}`);
       error.statusCode = 400;
@@ -81,15 +89,30 @@ function actionFor(orchestrator, id, action, payload) {
 }
 
 export function createServer({
-  orchestrator = new AgentOperationsOrchestrator({
+  orchestrator: suppliedOrchestrator,
+  logger = createLogger({ service: "agent-operations-console.http" }),
+  webhookSecret = null,
+} = {}) {
+  const runtimeConfig = readRuntimeConfig();
+  const resolvedWebhookSecret = webhookSecret ?? runtimeConfig.webhookSecret;
+  const orchestrator = suppliedOrchestrator ?? new AgentOperationsOrchestrator({
+    logger,
     defaultRepository: {
       provider: "bitbucket-stash",
       defaultBranch: "main",
     },
-  }),
-  webhookSecret = readRuntimeConfig().webhookSecret,
-} = {}) {
+  });
   return createHttpServer(async (request, response) => {
+    const requestId = requestIdFor(request);
+    const startedAt = performance.now();
+    response.setHeader("X-Correlation-ID", requestId);
+    response.once("finish", () => logger.info("http.request", {
+      requestId,
+      method: request.method,
+      path: request.url?.split("?")[0],
+      statusCode: response.statusCode,
+      durationMs: Math.round((performance.now() - startedAt) * 100) / 100,
+    }));
     try {
       const url = new URL(request.url, "http://localhost");
       if (request.method === "GET" && url.pathname === "/health") {
@@ -108,6 +131,15 @@ export function createServer({
         json(response, 200, { runs: orchestrator.listRuns() });
         return;
       }
+      if (request.method === "GET" && url.pathname.startsWith("/api/runs/") && url.pathname.endsWith("/events")) {
+        const id = url.pathname.split("/")[3];
+        if (!orchestrator.getRun(id)) {
+          json(response, 404, { error: "Run not found" });
+          return;
+        }
+        json(response, 200, { events: orchestrator.listEvents(id) });
+        return;
+      }
       if (request.method === "GET" && url.pathname.startsWith("/api/runs/")) {
         const id = url.pathname.split("/").pop();
         const run = orchestrator.getRun(id);
@@ -119,7 +151,7 @@ export function createServer({
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/demo/ingest") {
-        const result = await orchestrator.ingestJiraWebhook(sampleJiraWebhook());
+        const result = await orchestrator.ingestJiraWebhook(sampleJiraWebhook(), { requestId });
         json(response, result.accepted ? 202 : 422, result);
         return;
       }
@@ -130,11 +162,11 @@ export function createServer({
       }
       if (request.method === "POST" && url.pathname === "/api/hooks/jira") {
         const raw = await body(request);
-        if (!verifyWebhookSignature(raw, webhookSignatureFromHeaders(request.headers), webhookSecret)) {
+        if (!verifyWebhookSignature(raw, webhookSignatureFromHeaders(request.headers), resolvedWebhookSecret)) {
           json(response, 401, { error: "Invalid webhook signature" });
           return;
         }
-        const result = await orchestrator.ingestJiraWebhook(JSON.parse(raw.toString("utf8")));
+        const result = await orchestrator.ingestJiraWebhook(JSON.parse(raw.toString("utf8")), { requestId });
         json(response, result.accepted ? 202 : 422, result);
         return;
       }
@@ -142,7 +174,7 @@ export function createServer({
         const pieces = url.pathname.split("/");
         const id = pieces[3];
         const payload = JSON.parse((await body(request)).toString("utf8") || "{}");
-        const run = await actionFor(orchestrator, id, payload.action, payload);
+        const run = await actionFor(orchestrator, id, payload.action, payload, requestId);
         json(response, 200, { run });
         return;
       }
@@ -153,6 +185,12 @@ export function createServer({
       json(response, 404, { error: "Not found" });
     } catch (error) {
       const status = error instanceof SyntaxError ? 400 : error.statusCode ?? 500;
+      logger.error("http.request_failed", {
+        requestId,
+        path: request.url?.split("?")[0],
+        statusCode: status,
+        error,
+      });
       json(response, status, { error: error.message });
     }
   });
@@ -160,7 +198,8 @@ export function createServer({
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const port = Number(process.env.PORT ?? 4310);
-  createServer().listen(port, "127.0.0.1", () => {
-    console.log(`Agent Operations Console listening at http://127.0.0.1:${port}`);
+  const logger = createLogger({ service: "agent-operations-console.http" });
+  createServer({ logger }).listen(port, "127.0.0.1", () => {
+    logger.info("server.started", { host: "127.0.0.1", port });
   });
 }

@@ -1,24 +1,147 @@
 import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { test } from "node:test";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { sampleHarnessDogfoodWebhook, sampleJiraWebhook } from "../src/demo.js";
 import { RUN_STATUS, normalizeJiraIssue } from "../src/domain.js";
-import { AtlassianHttpAdapter, DryRunEnvironmentProvider, MemoryRunStore, RulesBasedBranchAdvisor } from "../src/adapters.js";
+import { AtlassianHttpAdapter, DryRunEnvironmentProvider, MemoryAuditEventStore, MemoryRunStore, RulesBasedBranchAdvisor } from "../src/adapters.js";
 import { AgentOperationsOrchestrator } from "../src/orchestrator.js";
 import { readRuntimeConfig } from "../src/config.js";
-import { verifyWebhookSignature, webhookSignatureFromHeaders } from "../src/server.js";
+import { createServer, verifyWebhookSignature, webhookSignatureFromHeaders } from "../src/server.js";
+import { JsonlAuditEventStore, createLogger } from "../src/logging.js";
 
-function createOrchestrator() {
+function createOrchestrator(overrides = {}) {
   let counter = 0;
   const clock = () => new Date("2026-08-18T04:00:00.000Z");
   return new AgentOperationsOrchestrator({
     store: new MemoryRunStore(),
+    eventStore: new MemoryAuditEventStore(),
+    logger: createLogger({ sink: () => {} }),
     branchAdvisor: new RulesBasedBranchAdvisor(),
     environmentProvider: new DryRunEnvironmentProvider({ idFactory: () => `fixed-${++counter}`, clock }),
     clock,
     idFactory: () => "run-fixed",
+    ...overrides,
   });
 }
+
+function createCaptureLogger(clock = () => new Date("2026-08-18T04:00:00.000Z")) {
+  const lines = [];
+  return {
+    lines,
+    logger: createLogger({ clock, sink: (line) => lines.push(line) }),
+  };
+}
+
+async function withServer(server, callback) {
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const { port } = server.address();
+  try {
+    return await callback(`http://127.0.0.1:${port}`);
+  } finally {
+    await new Promise((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
+  }
+}
+
+test("redacts sensitive structured log fields and preserves correlation context", () => {
+  const { lines, logger } = createCaptureLogger();
+  logger.info("worker.started", {
+    runId: "run-1",
+    correlationId: "request-1",
+    token: "do-not-write",
+    prompt: "private prompt",
+    nested: { apiKey: "also-private", api_key: "also-private-too", client_secret: "and-private" },
+    authorization: "Bearer secret-token",
+  });
+  const record = JSON.parse(lines[0]);
+  assert.equal(record.runId, "run-1");
+  assert.equal(record.correlationId, "request-1");
+  assert.equal(record.token, "[REDACTED]");
+  assert.equal(record.prompt, "[REDACTED]");
+  assert.equal(record.nested.apiKey, "[REDACTED]");
+  assert.equal(record.nested.api_key, "[REDACTED]");
+  assert.equal(record.nested.client_secret, "[REDACTED]");
+  assert.equal(record.authorization, "[REDACTED]");
+  assert.doesNotMatch(lines[0], /do-not-write|private prompt|secret-token|also-private/);
+});
+
+test("persists idempotent JSONL audit events and reloads them", () => {
+  const directory = mkdtempSync(join(tmpdir(), "aoc-audit-"));
+  const path = join(directory, "events.jsonl");
+  try {
+    const event = {
+      eventId: "event-1",
+      type: "approval.granted",
+      at: "2026-08-18T04:00:00.000Z",
+      runId: "run-1",
+      correlationId: "request-1",
+      causationId: null,
+      actor: { type: "operator", id: "Faruk" },
+      severity: "info",
+      detail: "Faruk approved the bounded first pass.",
+      metadata: {},
+    };
+    const store = new JsonlAuditEventStore({ path });
+    store.append(event);
+    store.append(event);
+    assert.equal(readFileSync(path, "utf8").trim().split("\n").length, 1);
+    const reopened = new JsonlAuditEventStore({ path });
+    assert.deepEqual(reopened.list({ runId: "run-1" }), [event]);
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test("publishes correlated audit events without exposing failure secrets", async () => {
+  const capture = createCaptureLogger();
+  const eventStore = new MemoryAuditEventStore();
+  const orchestrator = createOrchestrator({ eventStore, logger: capture.logger });
+  const result = await orchestrator.ingestJiraWebhook(sampleJiraWebhook(), { requestId: "request-1" });
+  orchestrator.approve(result.run.id, "Faruk", { requestId: "request-2" });
+  orchestrator.execute(result.run.id, { requestId: "request-3" });
+  const failed = orchestrator.fail(result.run.id, "Authorization: Bearer do-not-write", { requestId: "request-4" });
+
+  const events = eventStore.list({ runId: result.run.id });
+  const logs = capture.lines.map((line) => JSON.parse(line));
+  assert.equal(events.length, failed.events.length);
+  assert.ok(events.every((event) => event.runId === result.run.id && event.correlationId === "request-1"));
+  assert.ok(logs.some((record) => record.eventType === "approval.granted" && record.requestId === "request-2"));
+  assert.doesNotMatch(capture.lines.join("\n"), /do-not-write/);
+});
+
+test("logs HTTP requests, returns their correlation ID, and exposes durable events", async () => {
+  const capture = createCaptureLogger();
+  const orchestrator = createOrchestrator({ logger: capture.logger });
+  const server = createServer({ orchestrator, logger: capture.logger });
+  await withServer(server, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/demo/ingest`, {
+      method: "POST",
+      headers: { "X-Correlation-ID": "request-http-1" },
+      body: JSON.stringify({ prompt: "never record request bodies" }),
+    });
+    assert.equal(response.status, 202);
+    assert.equal(response.headers.get("x-correlation-id"), "request-http-1");
+    const { run } = await response.json();
+    const eventsResponse = await fetch(`${baseUrl}/api/runs/${run.id}/events`);
+    assert.equal(eventsResponse.status, 200);
+    const { events } = await eventsResponse.json();
+    assert.equal(events.length, run.events.length);
+  });
+  const requestLog = capture.lines.map((line) => JSON.parse(line)).find((record) => record.message === "http.request" && record.path === "/api/demo/ingest");
+  assert.equal(requestLog.requestId, "request-http-1");
+  assert.equal(requestLog.statusCode, 202);
+  assert.doesNotMatch(capture.lines.join("\n"), /never record request bodies/);
+});
+
+test("keeps startup diagnostics on the structured log path", () => {
+  const { logger, lines } = createCaptureLogger();
+  logger.info("server.started", { host: "127.0.0.1", port: 4310 });
+  const record = JSON.parse(lines[0]);
+  assert.equal(record.message, "server.started");
+  assert.equal(record.port, 4310);
+});
 
 test("normalizes an Atlassian document and preserves repository routing data", () => {
   const ticket = normalizeJiraIssue(sampleJiraWebhook());

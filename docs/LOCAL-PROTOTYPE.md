@@ -28,3 +28,17 @@ The provider seams are intentionally explicit:
 
 No live Atlassian, repository, model, cloud, draft-PR, or Confluence side effect is enabled by this prototype.
 The next production decision should follow a paid-pilot workflow and define the customer's authentication, data residency, repository permission, cloud provider, and model-client boundaries before replacing these adapters.
+
+## Logging and audit trail
+
+The local server writes one structured JSON record per line to `.scratch/audit-events.jsonl` by default.
+Set `AUDIT_LOG_PATH` to use another local path.
+
+Domain events are append-only and carry an event ID, run ID, correlation ID, causation ID, actor, severity, and redacted metadata.
+The event store is idempotent by event ID, so retrying a persistence call does not duplicate an audit record.
+
+HTTP requests receive or generate an `X-Correlation-ID`, and request logs record the method, path, status, duration, and correlation ID without recording request bodies.
+Sensitive fields such as tokens, credentials, prompts, source-code fields, cookies, and private keys are redacted before diagnostic logs or audit events are written.
+
+Use `GET /api/runs/<run-id>/events` to inspect the durable audit records for a run.
+The in-memory run state remains a prototype limitation; the JSONL audit trail is the first persistence seam to replace with PostgreSQL after the paid workflow validates the product boundary.

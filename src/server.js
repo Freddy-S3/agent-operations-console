@@ -93,8 +93,7 @@ export function createServer({
   logger = createLogger({ service: "agent-operations-console.http" }),
   webhookSecret = null,
 } = {}) {
-  const runtimeConfig = readRuntimeConfig();
-  const resolvedWebhookSecret = webhookSecret ?? runtimeConfig.webhookSecret;
+  const resolvedWebhookSecret = webhookSecret ?? readRuntimeConfig().webhookSecret;
   const orchestrator = suppliedOrchestrator ?? new AgentOperationsOrchestrator({
     logger,
     defaultRepository: {

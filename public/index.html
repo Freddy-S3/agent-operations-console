@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A local rehearsal of a safe, auditable agent operations workflow.">
+    <meta name="description" content="A local-first operator console for safe, auditable AI-assisted software delivery.">
     <title>Agent Operations Console</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
@@ -11,61 +11,121 @@
     <header class="topbar">
       <a class="brand" href="/" aria-label="Agent Operations Console home">
         <span class="brand-mark" aria-hidden="true">AO</span>
-        <span>Agent Operations Console</span>
+        <span class="brand-copy"><strong>Agent Operations</strong><small>Local control plane</small></span>
       </a>
+      <nav class="topnav" aria-label="Console sections">
+        <button class="nav-item is-active" data-view-tab="runs">Runs <span id="nav-run-count" class="nav-count">0</span></button>
+        <button class="nav-item" data-view-tab="playbook">Playbook</button>
+        <button class="nav-item" data-view-tab="connections">Connections</button>
+      </nav>
       <div class="topbar-actions">
-        <span class="mode-pill"><span class="status-dot"></span> Local rehearsal</span>
+        <span class="environment-chip"><span class="status-dot"></span> Local / dry-run</span>
         <span id="feedback" class="feedback" aria-live="polite">Ready</span>
-        <button class="button button-secondary" data-action="refresh">Refresh</button>
+        <button class="button button-secondary button-compact" data-action="refresh">Refresh</button>
       </div>
     </header>
 
     <main class="shell">
       <section class="intro">
-        <div>
+        <div class="intro-copy-block">
           <p class="eyebrow">Operator control plane / first vertical slice</p>
-          <h1>Make agent-assisted delivery recoverable.</h1>
-          <p class="intro-copy">A Jira ticket enters through an explicit intake boundary, gets a branch recommendation and isolated environment, then waits for a human gate before the restricted first pass.</p>
-        </div>
-        <div class="intro-actions">
-          <button class="button button-primary" data-action="ingest">Ingest sample Jira ticket</button>
-          <p class="microcopy">Synthetic PAY-142. No cloud, repository, or model side effects.</p>
-        </div>
-      </section>
-
-      <section class="metrics" aria-label="Run metrics">
-        <article class="metric-card"><span>Runs</span><strong id="metric-runs">0</strong><small>tracked in this rehearsal</small></article>
-        <article class="metric-card"><span>Human gates</span><strong id="metric-gates">0</strong><small>waiting for an operator</small></article>
-        <article class="metric-card"><span>Recovered</span><strong id="metric-recovered">0</strong><small>runs with preserved context</small></article>
-        <article class="metric-card"><span>Evidence</span><strong id="metric-evidence">0</strong><small>records attached to runs</small></article>
-      </section>
-
-      <section class="workspace">
-        <aside class="panel run-panel">
-          <div class="panel-heading">
-            <div><p class="eyebrow">Work queue</p><h2>Agent runs</h2></div>
-            <span id="run-count" class="count-badge">0</span>
+          <h1>Give engineers a ready-to-review first pass.</h1>
+          <p class="intro-copy">A ready Jira ticket enters a restricted Faruk first pass, gets its own branch and worktree, and waits at a visible human gate before any engineer picks up the PR.</p>
+          <div class="flow-strip" aria-label="First pass workflow">
+            <span class="flow-step is-complete"><b>01</b> Jira ready</span>
+            <span class="flow-connector"></span>
+            <span class="flow-step"><b>02</b> Branch + worktree</span>
+            <span class="flow-connector"></span>
+            <span class="flow-step"><b>03</b> Human gate</span>
+            <span class="flow-connector"></span>
+            <span class="flow-step"><b>04</b> Engineer handoff</span>
           </div>
-          <div id="run-list" class="run-list" aria-live="polite">
-            <div class="empty-state"><span class="empty-icon">+</span><strong>No runs yet</strong><p>Ingest the synthetic ticket to rehearse the workflow.</p></div>
+        </div>
+        <aside class="launch-card">
+          <div class="launch-card-topline"><span class="launch-icon">↗</span><span class="field-label">Jira intake</span><span class="live-label">rehearsal</span></div>
+          <h2>Ready tickets wait here.</h2>
+          <p>Use the synthetic PAY-142 ticket to see the workflow end to end. No repository, model, cloud, or PR side effects are enabled.</p>
+          <div class="launch-actions">
+            <button class="button button-primary" data-action="ingest">Simulate Jira intake</button>
+            <button class="button button-quiet" data-action="reset">Reset rehearsal</button>
           </div>
         </aside>
+      </section>
 
-        <section class="panel detail-panel" aria-live="polite">
-          <div id="run-detail">
-            <div class="detail-empty"><p class="eyebrow">Selected run</p><h2>Choose a run to inspect its evidence</h2><p>The detail view will show the ticket, branch decision, environment, human gate, and recovery trail.</p></div>
-          </div>
+      <section id="runs-view" class="view-panel is-visible" aria-labelledby="runs-heading">
+        <div class="section-bar">
+          <div><p class="eyebrow">Today at a glance</p><h2 id="runs-heading">Delivery runs</h2></div>
+          <p class="section-note">The operator sees what is safe to approve and what needs recovery.</p>
+        </div>
+
+        <section class="metrics" aria-label="Run metrics">
+          <article class="metric-card metric-primary"><span>Tracked runs</span><strong id="metric-runs">0</strong><small id="metric-runs-note">nothing in the queue yet</small></article>
+          <article class="metric-card"><span>Needs a gate</span><strong id="metric-gates">0</strong><small>waiting for operator approval</small></article>
+          <article class="metric-card"><span>Recovered</span><strong id="metric-recovered">0</strong><small>preserved run identities</small></article>
+          <article class="metric-card"><span>Evidence records</span><strong id="metric-evidence">0</strong><small>portable delivery proof</small></article>
+        </section>
+
+        <section class="workspace">
+          <aside class="panel queue-panel">
+            <div class="panel-heading">
+              <div><p class="eyebrow">Work queue</p><h2>Agent runs</h2></div>
+              <span id="run-count" class="count-badge">0</span>
+            </div>
+            <div class="queue-tools">
+              <label class="search-field"><span class="sr-only">Search runs</span><span class="search-icon">⌕</span><input id="run-search" type="search" placeholder="Search tickets or branches" autocomplete="off"></label>
+              <div class="filter-row" role="group" aria-label="Filter runs">
+                <button class="filter-chip is-active" data-run-filter="all">All</button>
+                <button class="filter-chip" data-run-filter="attention">Needs attention</button>
+                <button class="filter-chip" data-run-filter="active">In progress</button>
+              </div>
+            </div>
+            <div id="run-list" class="run-list" aria-live="polite">
+              <div class="empty-state"><span class="empty-icon">+</span><strong>No runs yet</strong><p>Simulate the Jira intake above to create the first isolated run.</p></div>
+            </div>
+            <div class="queue-footer"><span class="status-dot"></span><span>Side effects disabled</span><span class="footer-divider"></span><span>Local memory store</span></div>
+          </aside>
+
+          <section class="panel detail-panel" aria-live="polite">
+            <div id="run-detail">
+              <div class="detail-empty"><span class="empty-orbit">AO</span><p class="eyebrow">Selected run</p><h2>Choose a run to inspect its evidence.</h2><p>The detail view will show the ticket, branch decision, human gate, recovery trail, and engineer handoff.</p></div>
+            </div>
+          </section>
         </section>
       </section>
 
-      <section class="integration-strip">
-        <div class="section-heading"><p class="eyebrow">Integration boundary</p><h2>Provider-neutral by design</h2><p>The first slice keeps customer systems outside the core workflow and gives each one a replaceable adapter.</p></div>
-        <div class="integration-grid">
-          <article class="integration-card"><span class="integration-icon">J</span><div><strong>Atlassian Jira</strong><p>Signed webhook intake and ticket normalization.</p></div><span class="adapter-status">adapter</span></article>
-          <article class="integration-card"><span class="integration-icon">C</span><div><strong>Confluence</strong><p>Evidence bundle can become a reviewable draft page.</p></div><span class="adapter-status">adapter</span></article>
-          <article class="integration-card"><span class="integration-icon">B</span><div><strong>Bitbucket / Stash</strong><p>Repository and branch context stays customer-owned.</p></div><span class="adapter-status">adapter</span></article>
-          <article class="integration-card"><span class="integration-icon">AI</span><div><strong>Client-selected model</strong><p>Branch advice is a seam, with rules as the safe fallback.</p></div><span class="adapter-status">seam</span></article>
+      <section id="playbook-view" class="view-panel" aria-labelledby="playbook-heading" hidden>
+        <div class="section-bar">
+          <div><p class="eyebrow">How the product earns its keep</p><h2 id="playbook-heading">The first-pass playbook</h2></div>
+          <p class="section-note">Automation does the preparation. Engineers keep the decision boundary.</p>
         </div>
+        <div class="playbook-layout">
+          <article class="playbook-feature">
+            <span class="feature-kicker">Faruk first pass</span>
+            <h3>Prepare a bounded draft asynchronously.</h3>
+            <p>The hook handles intake, branch planning, isolated context, and verification evidence. The run stops before broad repository, merge, deployment, or production permissions.</p>
+            <div class="permission-list"><span><i class="permission-dot allowed"></i>Read ticket context</span><span><i class="permission-dot allowed"></i>Create isolated branch</span><span><i class="permission-dot gated"></i>Open draft PR</span><span><i class="permission-dot blocked"></i>Merge or deploy</span></div>
+          </article>
+          <div class="playbook-steps">
+            <article class="playbook-step"><span class="step-number">01</span><div><strong>Ticket becomes eligible</strong><p>Jira adds the agreed <code>agent-ready</code> label.</p></div><span class="step-state">hook</span></article>
+            <article class="playbook-step"><span class="step-number">02</span><div><strong>Context is isolated</strong><p>A branch recommendation and worktree identity are recorded.</p></div><span class="step-state">automatic</span></article>
+            <article class="playbook-step"><span class="step-number">03</span><div><strong>Operator approves</strong><p>The first pass cannot run until the human gate is explicit.</p></div><span class="step-state">gate</span></article>
+            <article class="playbook-step"><span class="step-number">04</span><div><strong>Engineer takes over</strong><p>Review the evidence, test the branch, and invoke Freddy for correction.</p></div><span class="step-state">handoff</span></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="connections-view" class="view-panel" aria-labelledby="connections-heading" hidden>
+        <div class="section-bar">
+          <div><p class="eyebrow">Integration boundary</p><h2 id="connections-heading">Provider-neutral by design</h2></div>
+          <p class="section-note">Each customer system stays behind a replaceable adapter until the paid pilot proves the boundary.</p>
+        </div>
+        <div class="connections-grid">
+          <article class="connection-card"><div class="connection-mark">J</div><div><strong>Atlassian Jira</strong><p>Signed webhook intake and normalized issue context.</p></div><span class="adapter-status">ready seam</span></article>
+          <article class="connection-card"><div class="connection-mark">B</div><div><strong>Bitbucket / Stash</strong><p>Repository, branch, and worktree context remains customer-owned.</p></div><span class="adapter-status">dry-run</span></article>
+          <article class="connection-card"><div class="connection-mark">C</div><div><strong>Confluence</strong><p>Evidence can become a reviewable documentation draft later.</p></div><span class="adapter-status">adapter</span></article>
+          <article class="connection-card"><div class="connection-mark ai-mark">AI</div><div><strong>Client-selected model</strong><p>Branch advice is replaceable, with rules as the safe fallback.</p></div><span class="adapter-status">seam</span></article>
+        </div>
+        <div class="boundary-note"><span class="note-mark">i</span><div><strong>What this local build deliberately does not do</strong><p>It does not call Jira, create a real branch, launch an agent, open a PR, or persist data outside this process. The UI is here to validate the operator workflow before those permissions exist.</p></div></div>
       </section>
     </main>
     <script type="module" src="/app.js"></script>

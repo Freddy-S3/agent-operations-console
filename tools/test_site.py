@@ -7,7 +7,7 @@ from playwright.sync_api import sync_playwright
 
 
 BASE_URL = os.environ.get("AOC_URL", "http://127.0.0.1:4310")
-WIDTHS = (375, 640, 1000, 1280, 1440)
+WIDTHS = (375, 640, 820, 1000, 1280, 1440)
 RENDER_DIR = Path(".scratch/renders")
 
 
@@ -22,8 +22,8 @@ def assert_no_sibling_collisions(page):
         () => {
           const groups = [
             [...document.querySelectorAll('.metric-card')],
-            [...document.querySelectorAll('.integration-card')],
             [...document.querySelectorAll('.decision-card')],
+            [...document.querySelectorAll('.connection-card')],
           ];
           const result = [];
           for (const group of groups) {
@@ -46,29 +46,55 @@ def assert_no_sibling_collisions(page):
 
 def assert_clean_surface(page, console_errors, page_errors, request_failures):
     assert page.locator("h1").count() == 1
+    assert page.locator("#runs-view").is_visible()
     assert page.locator("img").count() == 0
     hrefs = page.locator("a").evaluate_all("anchors => anchors.map(anchor => anchor.href)")
     assert all(href and not href.endswith("#") for href in hrefs), f"invalid links: {hrefs}"
+    controls = page.locator("button")
+    assert controls.count() >= 8
+    assert all(text.strip() for text in controls.all_inner_texts()), "every button needs visible text"
     assert not console_errors, f"console errors: {console_errors}"
     assert not page_errors, f"page errors: {page_errors}"
     assert not request_failures, f"failed requests: {request_failures}"
 
 
-def wait_for_text(page, text):
-    page.wait_for_function(
-        "expected => document.querySelector('#run-detail').innerText.toLowerCase().includes(expected.toLowerCase())",
-        arg=text,
+def fingerprint(page):
+    return page.evaluate(
+        """
+        () => ({
+          activeView: [...document.querySelectorAll('.view-panel')].find((panel) => !panel.hidden)?.id,
+          feedback: document.querySelector('#feedback').innerText,
+          runs: document.querySelector('#metric-runs').innerText,
+          selected: document.querySelector('[data-select-run].is-selected')?.dataset.selectRun ?? null,
+          filter: document.querySelector('[data-run-filter].is-active')?.dataset.runFilter ?? null,
+          search: document.querySelector('#run-search').value,
+          detail: document.querySelector('#run-detail').innerText,
+        })
+        """
     )
 
 
+def assert_click_changes(page, locator, assertion, label):
+    before = fingerprint(page)
+    locator.click()
+    page.wait_for_function(assertion)
+    after = fingerprint(page)
+    assert before != after, f"{label} did not change the rendered state"
+
+
 def run_interaction_path(page):
-    page.locator("[data-action='refresh']").click()
+    refresh = page.locator("[data-action='refresh']")
+    refresh.click()
     page.wait_for_function("document.querySelector('#feedback').innerText.startsWith('Refreshed at')")
+
+    assert_click_changes(page, page.locator("[data-view-tab='playbook']"), "document.querySelector('#playbook-view').hidden === false", "playbook tab")
+    assert_click_changes(page, page.locator("[data-view-tab='connections']"), "document.querySelector('#connections-view').hidden === false", "connections tab")
+    assert_click_changes(page, page.locator("[data-view-tab='runs']"), "document.querySelector('#runs-view').hidden === false", "runs tab")
 
     page.locator("[data-action='ingest']").click()
     page.wait_for_function("document.querySelector('#metric-runs').innerText === '1'")
-    wait_for_text(page, "PAY-142")
-
+    assert "PAY-142" in page.locator("#run-detail").inner_text()
+    assert page.locator(".stage-item.is-active").inner_text() == "03\nGATE"
     page.locator("[data-action='ingest']").click()
     page.wait_for_function("document.querySelector('#metric-runs').innerText === '2'")
     rows = page.locator("[data-select-run]")
@@ -76,24 +102,49 @@ def run_interaction_path(page):
     first_id = rows.nth(0).get_attribute("data-select-run")
     second_id = rows.nth(1).get_attribute("data-select-run")
     assert first_id != second_id
-    rows.nth(0).click()
+
+    search = page.locator("#run-search")
+    search.fill("no-such-ticket")
+    page.wait_for_function("document.querySelector('#run-list').innerText.includes('No matching runs')")
+    page.locator("[data-action='clear-filter']").click()
+    page.wait_for_function("document.querySelectorAll('[data-select-run]').length === 2")
+    page.locator("[data-run-filter='attention']").click()
+    page.wait_for_function("document.querySelector('[data-run-filter].is-active').dataset.runFilter === 'attention'")
+    assert page.locator("[data-select-run]").count() == 2
+    page.locator("[data-run-filter='active']").click()
+    page.wait_for_function("document.querySelector('[data-run-filter].is-active').dataset.runFilter === 'active'")
+    assert page.locator("[data-select-run]").count() == 0
+    page.locator("[data-run-filter='all']").click()
+    page.wait_for_function("document.querySelectorAll('[data-select-run]').length === 2")
+
+    page.locator("[data-select-run]").nth(0).click()
     page.wait_for_function(
         "expected => document.querySelector('[data-select-run].is-selected').dataset.selectRun === expected",
         arg=first_id,
     )
-
     page.locator("[data-run-action='approve']").click()
-    wait_for_text(page, "Approved")
+    page.wait_for_selector(".status-approved")
+    assert page.locator(".stage-item.is-active").inner_text() == "04\nFIRST PASS"
     page.locator("[data-run-action='execute']").click()
-    wait_for_text(page, "Awaiting review")
+    page.wait_for_selector(".status-awaiting_review")
     page.locator("[data-run-action='fail']").click()
-    wait_for_text(page, "Failed")
+    page.wait_for_selector(".status-failed")
+    assert page.locator(".alert-danger").count() == 1
     page.locator("[data-run-action='recover']").click()
-    wait_for_text(page, "Recovered")
+    page.wait_for_selector(".status-recovered")
     page.locator("[data-run-action='execute']").click()
-    wait_for_text(page, "Awaiting review")
+    page.wait_for_selector(".status-awaiting_review")
     page.locator("[data-run-action='complete']").click()
-    wait_for_text(page, "Completed")
+    page.wait_for_selector(".status-completed")
+    page.wait_for_selector(".handoff-ready")
+    assert page.locator(".handoff-ready").count() == 1
+    page.screenshot(path=str(RENDER_DIR / "console-flow-375.png"), full_page=True)
+
+    refresh.click()
+    page.wait_for_function("document.querySelector('#feedback').innerText.startsWith('Refreshed at')")
+    page.locator("[data-action='reset']").click()
+    page.wait_for_function("document.querySelector('#metric-runs').innerText === '0'")
+    assert "No runs yet" in page.locator("#run-list").inner_text()
 
 
 def main():

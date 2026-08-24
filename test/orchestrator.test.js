@@ -8,7 +8,8 @@ import { sampleHarnessDogfoodWebhook, sampleJiraWebhook } from "../src/demo.js";
 import { RUN_STATUS, normalizeJiraIssue } from "../src/domain.js";
 import { AtlassianHttpAdapter, DryRunEnvironmentProvider, MemoryAuditEventStore, MemoryRunStore, RulesBasedBranchAdvisor } from "../src/adapters.js";
 import { AgentOperationsOrchestrator } from "../src/orchestrator.js";
-import { createServer, verifyWebhookSignature } from "../src/server.js";
+import { readRuntimeConfig } from "../src/config.js";
+import { createServer, verifyWebhookSignature, webhookSignatureFromHeaders } from "../src/server.js";
 import { JsonlAuditEventStore, createLogger } from "../src/logging.js";
 
 function createOrchestrator(overrides = {}) {
@@ -158,6 +159,29 @@ test("verifies Jira hook signatures with an HMAC and rejects tampering", () => {
   assert.equal(verifyWebhookSignature(raw, "sha256=not-a-real-signature", "secret"), false);
 });
 
+test("accepts Jira Cloud and local prototype webhook signature headers", () => {
+  assert.equal(webhookSignatureFromHeaders({ "x-hub-signature": "sha256=jira" }), "sha256=jira");
+  assert.equal(webhookSignatureFromHeaders({ "x-agent-operations-signature": "sha256=local" }), "sha256=local");
+});
+
+test("reads local Atlassian configuration without exposing secrets", () => {
+  const config = readRuntimeConfig({
+    ATLASSIAN_EMAIL: "faruk@example.test",
+    ATLASSIAN_API_TOKEN: "local-secret",
+    JIRA_BASE_URL: "https://async-engineer.atlassian.net",
+    CONFLUENCE_BASE_URL: "https://async-engineer.atlassian.net",
+    WEBHOOK_SECRET: "webhook-secret",
+  });
+  assert.deepEqual(config.atlassian, {
+    email: "faruk@example.test",
+    token: "local-secret",
+    jiraBaseUrl: "https://async-engineer.atlassian.net",
+    confluenceBaseUrl: "https://async-engineer.atlassian.net",
+    bitbucketBaseUrl: null,
+  });
+  assert.equal(config.webhookSecret, "webhook-secret");
+});
+
 test("keeps Jira, Confluence, and Bitbucket provider hosts independently configurable", async () => {
   const requests = [];
   const adapter = new AtlassianHttpAdapter({
@@ -178,6 +202,21 @@ test("keeps Jira, Confluence, and Bitbucket provider hosts independently configu
     "https://stash.example.test/rest/api/1.0/projects/PAY/repos/payments-service",
     "https://wiki.example.test/wiki/api/v2/pages",
   ]);
+});
+
+test("uses email plus API token Basic authentication for direct Atlassian Cloud calls", async () => {
+  let authorization;
+  const adapter = new AtlassianHttpAdapter({
+    jiraBaseUrl: "https://async-engineer.atlassian.net",
+    email: "faruk@example.test",
+    token: "local-secret",
+    fetchImpl: async (_url, options) => {
+      authorization = options.headers.Authorization;
+      return { ok: true, status: 200, json: async () => ({ ok: true }) };
+    },
+  });
+  await adapter.readJiraIssue("AS-1");
+  assert.equal(authorization, `Basic ${Buffer.from("faruk@example.test:local-secret").toString("base64")}`);
 });
 
 test("rejects tickets that have not reached the explicit intake label", async () => {

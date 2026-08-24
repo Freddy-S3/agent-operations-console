@@ -15,6 +15,10 @@ Recent commits:
 - 0edeb43 Record agent-neutral execution boundary
 - 7a2bbe4 Document Atlassian Rovo competition
 - d407556 Merge pull request #12 from Freddy-S3/codex/agent-operations-console-ui
+- 9218e22 Prepare local Jira Cloud credential testing
+- f8f7a28 Add structured audit logging
+- 5477bc6 Merge pull request #9 from Freddy-S3/chore/harness-entrypoint
+- 2d9ab6c Point agents at the harness rules from the repository root
 
 Working-tree status:
 - Clean

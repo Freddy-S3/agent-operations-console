@@ -1,6 +1,6 @@
 # Competitive Landscape
 
-Research date: 2026-08-17.
+Research dates: 2026-08-17 and 2026-08-23.
 
 This is a directional scan of public competitor positioning, offers, and visible product patterns for the Agent Operations Console discovery effort.
 
@@ -33,6 +33,135 @@ The market is therefore not waiting for another generic AI consultancy.
 The current opportunity hypothesis is narrower: a lightweight, vendor-neutral operating layer for small software teams that already use coding agents and need reliable supervision, approvals, recovery, and evidence across real repository work.
 
 That hypothesis still requires buyer interviews and a paid concierge pilot.
+
+## Atlassian Rovo and Jira-native coding automation
+
+The short answer is yes: Atlassian now has a direct product overlap with part of this idea.
+
+The important distinction is between Rovo and Rovo Dev.
+
+Rovo is Atlassian's broader AI layer for search, chat, agents, and studio workflows across organizational knowledge.
+[Atlassian's Rovo product page](https://www.atlassian.com/software/rovo) says the full Rovo feature set requires a Standard, Premium, or Enterprise Cloud plan.
+
+Rovo agents are configurable AI teammates that can be used in chat, Jira and Confluence editing, automation rules, and Rovo Studio.
+Atlassian says agents can perform actions such as organizing, creating, or editing Jira work items and Confluence pages when granted permission.
+[Rovo agents documentation](https://support.atlassian.com/rovo/docs/agents/)
+
+Rovo agents can also be invoked from automation rules.
+The rule supplies a trigger, a prompt, and optionally a second action that consumes the agent response.
+Atlassian says autonomous operation requires administrator-managed automation setup.
+[Automating Rovo agents](https://support.atlassian.com/rovo/docs/agents-in-automations/)
+
+Rovo Dev is the more direct competitor.
+Atlassian describes it as a context-aware software development agent for code planning, code generation, code review, and repetitive-work automation.
+[Rovo Dev product overview](https://www.atlassian.com/software/rovo-dev)
+
+Rovo Dev in Jira is positioned as an execution surface for Jira work items.
+Atlassian says it can run multiple cloud sessions, gather context, propose a plan, execute code changes, run tests, and create merge-ready pull requests in a configurable sandbox.
+Atlassian also says Jira Automation can trigger Rovo Dev after a team has proven a repeatable workflow.
+[Rovo Dev in Jira](https://www.atlassian.com/blog/company-news/rovo-dev-in-jira)
+
+Rovo Dev is also available through a CLI and IDE integrations.
+Atlassian describes the CLI as able to understand codebases, generate code and documentation, assist with tests and debugging, and connect to Jira, Confluence, and Bitbucket through MCP.
+[Rovo Dev CLI](https://www.atlassian.com/blog/blog/announcements/rovo-dev-command-line-interface)
+
+Rovo Dev is not an unrestricted bring-your-own-agent execution layer.
+Atlassian says Rovo Dev uses hosted LLMs from providers including Anthropic and OpenAI.
+The Jira coding experience currently defaults to Claude Sonnet 4.6, while the CLI exposes a selectable catalog of supported models through `/models` and applies different credit multipliers.
+The reviewed Atlassian documentation does not establish arbitrary customer model routing or support for any client-selected private model.
+[Rovo Dev FAQ](https://www.atlassian.com/software/rovo-dev), [Rovo Dev in Jira model guidance](https://community.atlassian.com/forums/Rovo-for-Software-Teams-Beta/Webinar-Q-amp-A-Rovo-Dev-in-Jira/ba-p/3215401), and [Rovo Dev CLI model selection](https://support.atlassian.com/rovo/docs/switch-between-large-language-models-in-rovo-dev-cli/)
+
+### What Jira itself can already do
+
+Jira has several integration primitives that can look like coding automation even without Rovo Dev.
+
+1. Jira webhooks send HTTP POST callbacks to an external application when configured events occur.
+   They can be scoped with JQL and selected issue events.
+   [Jira webhook administration](https://support.atlassian.com/jira-cloud-administration/docs/manage-webhooks/) and [Jira webhook developer documentation](https://developer.atlassian.com/cloud/jira/platform/webhooks/)
+
+2. Jira Automation can send a web request to another system, include Jira work-item data or a custom payload, and hide sensitive values in the rule configuration.
+   [Jira Automation actions](https://support.atlassian.com/cloud-automation/docs/jira-automation-actions/)
+
+3. Jira's development-tool integrations connect work items to GitHub, Bitbucket, GitLab, and other supported tools.
+   Jira can show branches, commits, pull requests, builds, and deployments, and can create branches, commits, and pull requests from a work item when the connected tool supports it.
+   [Configure Jira development tools](https://support.atlassian.com/jira-software-cloud/docs/configure-development-tools/)
+
+4. Forge can act as a bridge between Jira and an external system.
+   Forge apps can receive Jira events, call Atlassian APIs, invoke external services, and expose custom automation actions.
+   [Building integrations with Forge](https://developer.atlassian.com/platform/forge/building-integrations/)
+
+These primitives are enough to build a Jira-to-agent webhook like the one in our prototype.
+They do not, by themselves, provide a complete neutral control plane for branch choice, environment lifecycle, agent execution, approval, recovery, and evidence.
+That last sentence is an inference from the documented scope of the primitives, not a claim that Atlassian cannot build those capabilities through products or apps.
+
+### Competitive overlap
+
+| Capability | Atlassian position | Implication for Agent Operations Console |
+| --- | --- | --- |
+| Jira ticket intake | Jira webhooks and Automation provide native triggers and outbound requests. | Direct overlap at the event boundary. |
+| Branch and pull-request creation | Jira development integrations can create branches, commits, and pull requests through connected tools. | Do not position basic ticket-to-branch or ticket-to-PR as unique. |
+| AI code generation | Rovo Dev explicitly plans and generates code. | Direct competition for the coding-worker layer. |
+| Cloud execution | Rovo Dev in Jira claims cloud sessions and a configurable sandbox. | Direct overlap, but the public source does not establish support for every customer-selected cloud, repository host, or environment policy. |
+| Multiple agent sessions | Rovo Dev in Jira says users can orchestrate multiple cloud sessions from a Jira work item. | We need a sharper reason to exist than “run several agents.” |
+| Human control | Atlassian describes users reviewing plans and progress and approving changes before shipping. | Approval gates alone are not enough differentiation. |
+| Cross-provider operation | Jira supports multiple development tools, and Rovo MCP exposes several Atlassian products and some connected tools. | A truly provider-neutral control plane remains a possible opening, but this is an inference and must be tested with buyers. |
+| Client-selected AI provider | Rovo Dev uses Atlassian's supported hosted-model catalog, defaults to Claude Sonnet 4.6 in the Jira coding experience, and allows model selection in the CLI. The reviewed sources do not establish arbitrary customer model routing or bring-your-own private models. | A model-provider adapter boundary is a concrete potential differentiator. |
+| Durable evidence and recovery | The reviewed official sources describe plans, code, reviews, automation, and permissions, but I found no authoritative description of a portable failed-run recovery and evidence bundle. | This is a candidate gap, not a confirmed absence. |
+| Atlassian-native context | Rovo and Rovo Dev use Atlassian's connected knowledge and Teamwork Graph context. | Atlassian has a strong context advantage inside its ecosystem. |
+
+### Strategic conclusion
+
+We should not compete on the generic promise “turn a Jira ticket into code and a pull request.”
+Rovo Dev is already moving directly into that space.
+
+The stronger product boundary is an operations layer around whichever execution agent a customer already uses.
+That layer would coordinate Jira, repository providers, cloud environments, approvals, policy, evidence, recovery, and handoff across provider boundaries.
+
+Rovo Dev should be treated as both a competitor and a potential execution adapter.
+If a customer already pays for Rovo Dev, the console could supervise and audit it rather than force the customer to replace it.
+If the customer uses Claude Code, Codex, GitHub Copilot, or an internal agent, the same control plane could route to that provider.
+The provider-neutral claim is a product hypothesis until a real workflow demonstrates that customers value it enough to pay.
+
+The initial differentiator should therefore be “safe, recoverable, reviewable execution across the tools you already have,” not “another coding agent.”
+
+### Product decisions this research supports
+
+1. Keep Jira webhook intake and the normalized repository boundary.
+2. Keep branch recommendation as an explicit, reviewable decision rather than hiding it inside a coding agent.
+3. Keep the environment provider, agent provider, and repository provider as separate adapters.
+4. Make the evidence bundle and recovery path first-class product concepts.
+5. Add a Rovo Dev adapter to the future provider matrix instead of assuming it must be defeated or ignored.
+6. Validate the differentiator against one low-risk personal workflow before purchasing Rovo Dev or adding more Atlassian products.
+7. Keep execution-agent and model-provider selection outside the core workflow so Rovo Dev can be one adapter alongside Claude Code, Codex, GitHub Copilot, or a client-approved internal agent.
+
+### Current access and pricing caveat
+
+The pricing and availability below were checked on 2026-08-23 and may change.
+
+Atlassian's Rovo product page says full Rovo access is tied to Standard, Premium, or Enterprise Cloud plans.
+Atlassian's Rovo Dev billing documentation describes Rovo Dev Free as available with paid Jira plans at 350 credits per user per month per Jira site, and Rovo Dev Standard as USD 20 per developer per month with 2,000 credits, with optional extra usage.
+[Rovo plans and trial](https://www.atlassian.com/licensing/rovo) and [Rovo Dev billing](https://support.atlassian.com/subscriptions-and-billing/docs/how-billing-works-for-rovo-dev-standard/)
+
+Our current Jira Free sandbox should not be assumed to include Rovo or Rovo Dev.
+We do not need to upgrade the sandbox just to validate the product thesis.
+
+### Evidence ledger
+
+| Claim | Primary source | Confidence |
+| --- | --- | --- |
+| Rovo includes search, chat, agents, and studio workflows. | [Atlassian Rovo](https://www.atlassian.com/software/rovo) | Confirmed |
+| Rovo agents can act in Jira and Confluence with permission and can be invoked in automation. | [Rovo agents](https://support.atlassian.com/rovo/docs/agents/) and [Automating Rovo agents](https://support.atlassian.com/rovo/docs/agents-in-automations/) | Confirmed |
+| Rovo Dev handles planning, code generation, reviews, and repetitive-work automation. | [Rovo Dev](https://www.atlassian.com/software/rovo-dev) | Confirmed |
+| Rovo Dev in Jira can run cloud sessions, execute code, test, and create merge-ready PRs in a sandbox. | [Rovo Dev in Jira](https://www.atlassian.com/blog/company-news/rovo-dev-in-jira) | Confirmed as an Atlassian product claim |
+| Jira can send webhooks and Automation web requests. | [Jira webhooks](https://support.atlassian.com/jira-cloud-administration/docs/manage-webhooks/) and [Jira Automation actions](https://support.atlassian.com/cloud-automation/docs/jira-automation-actions/) | Confirmed |
+| Jira development integrations can create branches, commits, and pull requests. | [Configure development tools](https://support.atlassian.com/jira-software-cloud/docs/configure-development-tools/) | Confirmed |
+| Forge can bridge Jira to external systems and custom automation. | [Building integrations with Forge](https://developer.atlassian.com/platform/forge/building-integrations/) | Confirmed |
+| Rovo Dev is a direct competitor to the coding-worker portion of this concept. | Combined product claims above and our current product scope. | Inferred |
+| Rovo Dev uses hosted models from providers including Anthropic and OpenAI. | [Rovo Dev FAQ](https://www.atlassian.com/software/rovo-dev) | Confirmed |
+| Rovo Dev in Jira currently defaults to Claude Sonnet 4.6, while the CLI exposes several selectable supported models. | [Rovo Dev in Jira model guidance](https://community.atlassian.com/forums/Rovo-for-Software-Teams-Beta/Webinar-Q-amp-A-Rovo-Dev-in-Jira/ba-p/3215401) and [Rovo Dev CLI model selection](https://support.atlassian.com/rovo/docs/switch-between-large-language-models-in-rovo-dev-cli/) | Confirmed |
+| Rovo Dev is not documented as an arbitrary bring-your-own-model execution layer. | Reviewed [Rovo Dev FAQ](https://www.atlassian.com/software/rovo-dev), [Rovo Dev in Jira model guidance](https://community.atlassian.com/forums/Rovo-for-Software-Teams-Beta/Webinar-Q-amp-A-Rovo-Dev-in-Jira/ba-p/3215401), and [Rovo Dev CLI model selection](https://support.atlassian.com/rovo/docs/switch-between-large-language-models-in-rovo-dev-cli/) | Unverified absence; treat as a product constraint until Atlassian documents otherwise |
+| Portable recovery and evidence are an open competitive gap. | No matching capability found in the reviewed official sources. | Unverified; requires broader research |
+| Rovo Dev or Rovo is included in the current Jira Free sandbox. | Current public pricing and plan documentation does not establish this. | Unverified; do not assume access |
 
 ## Competitor profiles
 
@@ -219,3 +348,12 @@ Recommended sequence:
 - [Autor](https://www.autor.ca/).
 - [Peligent](https://peligent.com/).
 - [Entuit](https://www.entuit.com/).
+- [Atlassian Rovo](https://www.atlassian.com/software/rovo).
+- [Atlassian Rovo Dev](https://www.atlassian.com/software/rovo-dev).
+- [Rovo Dev in Jira](https://www.atlassian.com/blog/company-news/rovo-dev-in-jira).
+- [Rovo agents](https://support.atlassian.com/rovo/docs/agents/).
+- [Jira development tools](https://support.atlassian.com/jira-software-cloud/docs/configure-development-tools/).
+- [Jira webhooks](https://support.atlassian.com/jira-cloud-administration/docs/manage-webhooks/).
+- [Jira Automation actions](https://support.atlassian.com/cloud-automation/docs/jira-automation-actions/).
+- [Atlassian Rovo MCP](https://developer.atlassian.com/cloud/rovo-mcp/).
+- [Rovo Dev model selection](https://support.atlassian.com/rovo/docs/switch-between-large-language-models-in-rovo-dev-cli/).

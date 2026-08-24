@@ -114,6 +114,7 @@ The opportunity therefore appears stronger at the operating, governance, evidenc
 - [`docs/LOCAL-PROTOTYPE.md`](docs/LOCAL-PROTOTYPE.md) - how to run the local Jira-to-operator-console rehearsal and where live integrations stop.
 - [`docs/DOGFOOD-FIRST-CLIENT.md`](docs/DOGFOOD-FIRST-CLIENT.md) - the first-client rehearsal using Faruk's own agent-workflow reliability problem.
 - [`docs/FREE-TRIAL-OFFER.md`](docs/FREE-TRIAL-OFFER.md) - the guided synthetic free-trial offer, activation path, paid unlocks, trust boundary, and first validation experiment.
+- [`docs/PROVIDER-ADAPTER-CONTRACT.md`](docs/PROVIDER-ADAPTER-CONTRACT.md) - the provider-neutral work-item and repository adapter contract for future Bitbucket/Stash and GitHub support.
 
 ## Local prototype
 

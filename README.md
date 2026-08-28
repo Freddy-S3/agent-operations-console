@@ -116,6 +116,7 @@ The opportunity therefore appears stronger at the operating, governance, evidenc
 - [`docs/FREE-TRIAL-OFFER.md`](docs/FREE-TRIAL-OFFER.md) - the guided synthetic free-trial offer, activation path, paid unlocks, trust boundary, and first validation experiment.
 - [`docs/PROVIDER-ADAPTER-CONTRACT.md`](docs/PROVIDER-ADAPTER-CONTRACT.md) - the provider-neutral work-item and repository adapter contract for future Bitbucket/Stash and GitHub support.
 - [`docs/MODEL-ROUTING-BUDGET-POLICY.md`](docs/MODEL-ROUTING-BUDGET-POLICY.md) - how asynchronous drafts, recovery, interactive follow-up, and evidence review should route model effort, latency, and budget.
+- [`docs/PILOT-DEPLOYMENT-BOUNDARY.md`](docs/PILOT-DEPLOYMENT-BOUNDARY.md) - the first external paid-pilot boundary for hosted core, optional thin runner, credentials, isolation, revocation, audit, updates, and kill switch.
 
 ## Local prototype
 

@@ -1,6 +1,6 @@
 Continue the agent-operations-console project.
 
-Purpose: Resume pricing and buyer validation
+Purpose: Resume hands-off product pricing and buyer validation
 Repository: C:\Users\faruk\Repo\agent-operations-console
 Current branch: codex/pricing-analysis
 Read AGENTS.md before acting.
@@ -12,9 +12,9 @@ Operating rules:
 - Keep this chat focused on coordination; create a separate outcome chat for implementation.
 
 Recent commits:
+- 47a4276 Define higher ticket hands-off pricing package
+- 134b8b0 Refresh pricing coordination handoff
 - 1519ef4 Add pricing analysis for agent operations console
-- e4105fb Merge pull request #15 from Freddy-S3/codex/provider-neutral-adapter-contract
-- 53546f7 Specify provider neutral adapter contract
 
 Working-tree status:
 - Clean

@@ -82,6 +82,99 @@ Keep self-hosted deployment, SSO, custom retention, contractual security work, a
 
 Pass through model-provider and infrastructure costs transparently until actual usage data supports a safer bundled allowance.
 
+## If the target is CAD 20,000
+
+CAD 20,000 should not be presented as a richer version of the current local dry-run prototype.
+
+At that price, the buyer is purchasing a first-year operating system for agent-assisted delivery, a controlled rollout, and scarce access to the founder.
+
+The product must do enough of the work asynchronously that the customer can operate it without you being available during the day.
+
+### Recommended CAD 20,000 structure
+
+| Component | Price | What it buys |
+| --- | ---: | --- |
+| Hands-off product and implementation | CAD 15,000 | A deployable product, live integrations, policy configuration, documentation, launch acceptance, and bounded async stabilization. |
+| Founder-led private enablement | CAD 5,000 | Three 90-minute private or small-group sessions, preparation against the customer's workflow, recorded walkthroughs, personalized runbook review, and fourteen days of async follow-up. |
+| First-year package total | **CAD 20,000** | A fixed, documented rollout with founder time separated as a scarce premium rather than hidden inside the software price. |
+
+The CAD 5,000 teaching component is a pricing hypothesis for scarce evening or weekend calendar time, not a claim that every buyer will value personal access equally.
+
+Additional private sessions should be separately scheduled and quoted, with a working hypothesis of CAD 1,500 per 90-minute session including preparation and follow-up.
+
+Renewal should not automatically include founder teaching.
+
+A later renewal hypothesis is CAD 8,000-12,000 per year for the software, supported integrations, documentation updates, and bounded async support, with new implementation or teaching quoted separately.
+
+### What the CAD 15,000 hands-off system must add
+
+The buyer should be able to reach a supported first run from documentation and an intake checklist, without needing a live founder walkthrough to understand the basic product.
+
+The system should include the following before this price is credible:
+
+- A hosted or self-managed deployment that can run real customer workflows rather than only a synthetic dry run.
+- Live Jira intake plus at least one supported repository and pull-request provider, with authentication, retries, failure states, and clear configuration boundaries.
+- Support for multiple repositories or workflows, such as up to three repositories and three approved task classes in the first-year package.
+- Operator and administrator roles, least-privilege credentials, secret handling, audit history, exportable evidence, retention controls, deletion controls, backups, and basic monitoring.
+- A self-serve onboarding path with an admin guide, operator guide, quickstart, workflow templates, troubleshooting guide, release notes, and short recorded walkthroughs.
+- A durable run record containing intent, branch or worktree decision, approvals, changes, checks, review, recovery, and handoff evidence.
+- A 30-60 day rollout with baseline measures, an acceptance review, and a written recommendation for the next workflow.
+- A bounded asynchronous support channel with a response window that fits a nights-and-weekends business, rather than an implied daytime or incident-response commitment.
+
+These are not a feature shopping list.
+
+They are the minimum trust, autonomy, and operating boundary needed for a buyer to hand the workflow to its own team.
+
+### What the CAD 5,000 personal premium must protect
+
+Personal teaching should be deliberately scarce and calendar-limited.
+
+The package should schedule the sessions in fixed evening or weekend windows, require a customer pre-read, and use the customer's real workflow as the teaching material.
+
+The package should include recordings and written answers so the buyer is not paying repeatedly for the same explanation.
+
+The package should not include unlimited ad hoc calls, daytime availability, custom feature development, production incident response, or open-ended Slack access.
+
+This makes the premium legible: the customer is paying for judgment, context, and a direct transfer of operating knowledge, while the base product is designed to stand on its own.
+
+### Day-job-friendly operating model
+
+The delivery should be designed around asynchronous work from the beginning.
+
+1. Use a structured intake form to collect repositories, task classes, operators, permissions, success measures, and data boundaries.
+2. Use a fixed implementation checklist and customer-owned accounts so setup does not depend on repeated live coordination.
+3. Provide the documentation and recorded walkthrough before the first teaching session.
+4. Batch async support into one or two predictable weekly windows.
+5. Reserve live time for decisions, workflow rehearsal, and teaching rather than status updates.
+6. Put any customer-specific code or integration outside the package behind a separate fixed-scope quote.
+
+The operating constraint should be explicit in the contract.
+
+If a buyer requires daytime coverage, rapid production response, or frequent bespoke calls, the offer has become a managed service and needs a different price, staffing model, or partner.
+
+### Who can justify CAD 20,000
+
+The current 5-20 person software-team hypothesis can support CAD 20,000 only when the buyer has a repeated and expensive delivery-control problem, multiple repositories or workflows, and a budget owner who can approve an implementation rather than a small tool subscription.
+
+If those conditions are absent, CAD 20,000 will feel like a large consulting bill compared with the USD 19-40 per-user monthly agent tools already available ([GitHub Copilot organization billing](https://docs.github.com/en/copilot/concepts/billing/organizations-and-enterprises), [Atlassian Rovo Dev pricing](https://www.atlassian.com/software/rovo-dev/pricing), and [Cursor pricing](https://prod.cursor.com/en-US/pricing)).
+
+The higher-ticket buyer is more likely to be a team with several delivery groups, a software consultancy standardizing agent work across clients, or a company with a material security, audit, or recovery requirement.
+
+That is an upmarket qualification change, not merely a pricing change.
+
+### Proof gates before quoting CAD 20,000
+
+Do not lead with the CAD 20,000 package until the following are true:
+
+- At least three paid pilots have exercised the workflow.
+- At least two customers have requested or used the same repeatable workflow capability.
+- One customer can complete the documented setup and first run without founder intervention.
+- A 30-60 day baseline and outcome report exists for at least one customer, with permission to use an anonymized version in sales.
+- Founder delivery time is bounded to a predictable number of hours per customer per month after launch.
+- The support, data, retention, ownership, liability, and cancellation boundaries are written before the quote is sent.
+
+Until these gates are met, sell the CAD 2,500-5,000 service and learn which parts of the CAD 20,000 system buyers actually value.
+
 ## Why CAD 2,500 is the right first price
 
 ### It is inside the local productized-service band
@@ -274,6 +367,7 @@ These limits are consistent with the current paid-pilot exclusions and trust bou
 | Outsource IT Canada publishes CAD 150-250/user/month for a broad all-inclusive managed IT service. | [Outsource IT Canada managed IT pricing](https://outsourceitcanada.com/services/managed-it-services). | Confirmed as a provider's own published range, checked 2026-08-27; not an independent market average. |
 | CodeLantern sells a four-week Spark engagement with real repository work, metrics, knowledge, and handoff but does not publish a price on the reviewed page. | [CodeLantern Spark](https://codelantern.ai/spark). | Confirmed as displayed, checked 2026-08-27; price absence is not evidence of a specific market rate. |
 | CAD 2,500 is the correct launch price. | Inference from product maturity, existing pilot scope, local service price signals, and founder time economics. | Inferred and must be validated through buyer behavior. |
+| CAD 20,000 is best framed as a first-year hands-off system plus a separately priced founder enablement premium. | Inference from the current prototype maturity, the adjacent fixed-scope service benchmarks, and Faruk's day-job availability constraint. | Inferred and must be validated with a buyer who has a repeated, expensive workflow problem. |
 
 ## Revisit trigger
 
@@ -281,4 +375,6 @@ Revisit this document after the first five to ten buyer conversations, after eac
 
 At each review, update the checked date, price table, evidence ledger, and the recommendation at the top.
 
-The next material pricing decision is whether the first customer will buy the CAD 2,500 founding pilot and whether the delivery can stay within the ten-hour internal effort target.
+For the day-job-friendly path, also track whether customers can complete setup and first use from the documentation, and whether founder teaching remains scarce enough to command its own premium.
+
+The next material pricing decision is whether the first customer will buy the CAD 2,500 founding pilot, whether the delivery can stay within the ten-hour internal effort target, and whether a later CAD 20,000 system package has enough repeatable product value to avoid bespoke consulting.

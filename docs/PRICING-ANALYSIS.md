@@ -300,6 +300,134 @@ Do not use a feature-count formula.
 
 Buyers are paying for a safer delivery workflow, not for the number of buttons in the console.
 
+## Consultancy economics and whether you can charge a similar rate
+
+An IT consultancy is usually selling a combination of scarce expertise, a defined outcome, implementation capacity, ongoing responsibility, and reduced buyer risk.
+
+The word "consultancy" covers several different commercial shapes:
+
+| Shape | How it is normally sold | Fit for this product |
+| --- | --- | --- |
+| Advisory or hourly work | The buyer purchases access to judgement for a defined number of hours or days. | Use for custom architecture, exceptional troubleshooting, or scarce founder teaching. |
+| Fixed-fee project | The seller defines scope, deliverables, acceptance, exclusions, and a handoff date. | This is the best default for the pilot and the hands-off implementation. |
+| Retainer or fractional leadership | The buyer pays monthly for a defined cadence, capacity, and access boundary. | Use only for bounded async support; do not imply daytime availability while keeping the day job. |
+| Managed service or MSP | The provider operates the system continuously for a recurring fee, often per user or covered service, with monitoring and escalation. | Treat this as a separate business model that requires coverage, tooling, incident boundaries, and possibly partners. |
+
+Some solutions firms also combine a software or infrastructure licence with implementation, training, and support.
+
+That bundle is why a buyer may approve thousands per month even when the underlying software seat costs tens of dollars.
+
+The high consultancy price is not pure salary converted into an hourly number.
+
+It also pays for sales and proposal time, non-billable research, project management, tooling, insurance, taxes, rework, delivery risk, support, and profit.
+
+Published Canadian examples show that these price shapes are real, but they are provider-specific signals rather than a market average.
+
+RedactLabs publishes CAD 250/hour for IT consultation, CAD 3,000/month for a fractional CISO retainer, and security audits from CAD 5,000 ([RedactLabs pricing](https://redactlabs.ca/pricing/)).
+
+Entuit publishes CAD 3,000/month for fifteen hours of senior support, an implied CAD 200/hour before considering the value of continuity and context ([Entuit pricing](https://www.entuit.com/)).
+
+SRS IT Consulting explicitly describes advisory, fixed-scope project, and fractional CTO engagements as its three common shapes, without publishing a rate ([SRS IT Consulting FAQ](https://srsit.ca/faq.html)).
+
+Outsource IT Canada publishes CAD 150-250 per user per month for a much broader managed IT service with monitoring, help desk, patching, security, and strategic reviews ([Outsource IT Canada managed IT pricing](https://outsourceitcanada.com/services/managed-it-services)).
+
+### Can this product charge a similar rate?
+
+Yes, but the comparable unit is the effective rate of a fixed outcome, not an unsupported claim that the founder is worth CAD 1,000/hour.
+
+Use CAD 250/hour as an internal target and custom-work anchor for now, based on the local consultation signal above.
+
+Do not make hourly billing the main offer because it invites a comparison with a commodity contractor and makes the buyer count your time instead of valuing the operating result.
+
+For the CAD 20,000 package, the effective gross rate changes sharply with total founder and delivery time:
+
+| Total founder and delivery time | Effective gross rate on CAD 20,000 | Interpretation |
+| ---: | ---: | --- |
+| 80 hours | CAD 250/hour | Plausible for a specialist fixed-fee implementation if the scope and outcome are credible. |
+| 60 hours | CAD 333/hour | Possible when the reusable product carries substantial value and the buyer has expensive workflow risk. |
+| 40 hours | CAD 500/hour | Too high to justify as ordinary consulting; present it as a productized system with scarce enablement. |
+| 20 hours | CAD 1,000/hour | Not credible as a normal service rate; only defensible if most value is an already-proven product and the buyer's avoided cost is very large. |
+
+The day-job constraint makes the 80-hour version unattractive if those hours must be delivered to one customer.
+
+The better design is to build reusable onboarding, integrations, templates, evidence handling, and documentation once, then keep customer-specific delivery and founder teaching bounded.
+
+That is how the CAD 20,000 package can have a high price without requiring a consulting schedule that your day job cannot support.
+
+The commercial language should be "first-year agent workflow reliability system" or similar, with a fixed scope and acceptance criteria.
+
+It should not be "twenty hours of my time" or "an hourly consulting engagement."
+
+## Client acquisition with a day job
+
+The first customer is more likely to come from trust and adjacency than from broad advertising or search-engine traffic.
+
+The initial sales goal is not to find everyone who might use agents.
+
+It is to find one buyer with an expensive, repeated workflow problem who already understands the value of a fixed-fee technical engagement.
+
+### Best initial buyer and channel order
+
+1. **Warm introductions.** Start with former colleagues, engineering leaders, founders, and people in local software communities who can describe a team already using coding agents.
+2. **Partner channel.** Approach small MSPs, IT consultancies, AI implementation firms, and software consultancies that can provide daytime coverage or introduce customers while you provide the repeatable product and specialist implementation.
+3. **Narrow proof-led content.** Publish a short demonstration of a recoverable, reviewable agent workflow, a redacted runbook, or a measured pilot result rather than generic AI commentary.
+4. **Targeted outbound.** Contact a small number of qualified CTOs, engineering managers, and consultancy owners only after the message and pilot scope have been tested through warm conversations.
+
+The partner channel is particularly compatible with a day job because a partner can own customer acquisition, daytime communication, and broader managed-service obligations.
+
+Any partner arrangement should define customer ownership, data access, support boundaries, incident escalation, implementation responsibility, and who is allowed to promise custom work.
+
+### Day-job-compatible sales motion
+
+Use one repeatable funnel:
+
+1. A free 30-minute fit call to confirm the buyer, workflow, permissions, and pain.
+2. A CAD 1,500-2,500 paid readiness assessment when the buyer needs analysis before approving a pilot.
+3. A CAD 2,500 founding pilot or CAD 4,000-5,000 standard setup with written exclusions and a fixed handoff.
+4. A supported annual system or higher-ticket implementation only after the workflow has produced proof and can be operated from documentation.
+
+The free call should qualify rather than become unpaid architecture consulting.
+
+Do not offer a free custom audit, a free integration plan, or unlimited pre-sales access.
+
+The qualification filter should be explicit:
+
+- The team already uses or is committed to using agent-assisted development.
+- The problem recurs across tasks, repositories, operators, or clients.
+- A budget owner can approve a fixed-fee implementation.
+- The buyer can provide customer-owned accounts and a named operator.
+- The buyer accepts documentation-first onboarding and bounded async support.
+
+Reject or re-scope buyers who require daytime coverage, rapid production incident response, unlimited bespoke calls, or a large amount of custom integration before they will pay.
+
+### What to sell in the first conversation
+
+Lead with a costly failure mode rather than the console's feature list.
+
+Examples include abandoned agent runs that cannot be reconstructed, review bottlenecks caused by unclear evidence, or teams that cannot safely extend agent use beyond one developer.
+
+The message should be close to:
+
+> We help a small engineering team turn one risky agent-assisted workflow into a documented, reviewable, recoverable process that the team can run without relying on one expert being available all day.
+
+Ask for the buyer's current workflow, failure cost, number of repositories, approval boundary, and tolerance for asynchronous rollout.
+
+Do not lead with the CAD 20,000 price until the buyer has confirmed the problem is repeated, expensive, and broad enough to justify a system rather than a pilot.
+
+### Acquisition proof gates
+
+Before relying on referrals or partners as a repeatable channel, collect:
+
+- Ten to twenty targeted buyer conversations, with the objection and language recorded.
+- Three paid pilots or assessments, even if the initial prices are discounted for learning.
+- One anonymized before-and-after workflow story with measured recovery, evidence, review, or operator-understanding improvement.
+- One customer or partner who can describe the offer accurately without founder translation.
+- One documented onboarding path that a customer can complete without a live daytime session.
+
+These gates do not mean waiting for perfect marketing.
+
+They prevent the higher-ticket offer from being based only on technical confidence or a single enthusiastic conversation.
+
 ## Validation experiments
 
 Run the following price tests during the first five to ten buyer conversations and paid-pilot calls.
@@ -368,13 +496,19 @@ These limits are consistent with the current paid-pilot exclusions and trust bou
 | CodeLantern sells a four-week Spark engagement with real repository work, metrics, knowledge, and handoff but does not publish a price on the reviewed page. | [CodeLantern Spark](https://codelantern.ai/spark). | Confirmed as displayed, checked 2026-08-27; price absence is not evidence of a specific market rate. |
 | CAD 2,500 is the correct launch price. | Inference from product maturity, existing pilot scope, local service price signals, and founder time economics. | Inferred and must be validated through buyer behavior. |
 | CAD 20,000 is best framed as a first-year hands-off system plus a separately priced founder enablement premium. | Inference from the current prototype maturity, the adjacent fixed-scope service benchmarks, and Faruk's day-job availability constraint. | Inferred and must be validated with a buyer who has a repeated, expensive workflow problem. |
+| Canadian IT consultancies commonly use advisory, fixed-scope project, and fractional-retainer models. | [SRS IT Consulting FAQ](https://srsit.ca/faq.html). | Confirmed as one provider's published engagement model, checked 2026-08-27. |
+| Canadian providers publish CAD 250/hour consultation, CAD 200/hour implied senior support, CAD 3,000/month fractional leadership, and CAD 150-250/user/month broad managed IT signals. | [RedactLabs pricing](https://redactlabs.ca/pricing/); [Entuit pricing](https://www.entuit.com/); [RedactLabs SMB practice](https://redactlabs.ca/practices/smb/); [Outsource IT Canada managed IT pricing](https://outsourceitcanada.com/services/managed-it-services). | Confirmed as provider-published prices, checked 2026-08-27; not an independent market average. |
+| This product can charge a consultancy-like effective rate when sold as a fixed outcome with reusable product value, but should not lead with a CAD 1,000/hour claim. | Inference from the published local service signals, the CAD 20,000 package arithmetic, and the day-job delivery constraint. | Inferred and must be validated through buyer conversations and paid work. |
+| Warm introductions and specialist partners are the most day-job-compatible initial acquisition channels. | Inference from the need for trust, the current narrow buyer hypothesis, and the partner's ability to cover daytime managed-service obligations. | Inferred and must be validated through ten to twenty targeted conversations. |
 
 ## Revisit trigger
 
-Revisit this document after the first five to ten buyer conversations, after each paid pilot, and whenever the product adds a new integration or ongoing operational responsibility.
+Revisit this document after the first ten to twenty targeted buyer conversations, after each paid pilot, and whenever the product adds a new integration or ongoing operational responsibility.
 
 At each review, update the checked date, price table, evidence ledger, and the recommendation at the top.
 
 For the day-job-friendly path, also track whether customers can complete setup and first use from the documentation, and whether founder teaching remains scarce enough to command its own premium.
+
+Track which acquisition channel produced each qualified conversation, the buyer's exact objection, the number of founder hours required, and whether a partner could have handled daytime support.
 
 The next material pricing decision is whether the first customer will buy the CAD 2,500 founding pilot, whether the delivery can stay within the ten-hour internal effort target, and whether a later CAD 20,000 system package has enough repeatable product value to avoid bespoke consulting.

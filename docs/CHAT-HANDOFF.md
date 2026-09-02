@@ -12,9 +12,9 @@ Operating rules:
 - Keep this chat focused on coordination; create a separate outcome chat for implementation.
 
 Recent commits:
+- a8ea502 Document investigation wiki drafts
+- 379226d Refresh intake policy handoff
 - eec7d01 Expand pilot drafts beyond code changes
-- 2872038 Define current-sprint pilot intake profile
-- e7759b6 Refresh coordination handoff
 
 Working-tree status:
 - Clean

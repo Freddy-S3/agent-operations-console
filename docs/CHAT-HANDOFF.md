@@ -12,9 +12,9 @@ Operating rules:
 - Keep this chat focused on coordination; create a separate outcome chat for implementation.
 
 Recent commits:
-- 5cbc1ca Document safe ticket intake trigger policy
-- 3772c5e Merge pull request #18 from Freddy-S3/codex/pilot-deployment-boundary
-- 144ee45 Merge pull request #17 from Freddy-S3/codex/pricing-analysis
+- eec7d01 Expand pilot drafts beyond code changes
+- 2872038 Define current-sprint pilot intake profile
+- e7759b6 Refresh coordination handoff
 
 Working-tree status:
 - Clean

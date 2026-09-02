@@ -16,9 +16,10 @@ The first external pilot is intentionally narrow:
 - one customer workspace;
 - one Jira project;
 - one repository;
-- one ticket class;
+- current-sprint work items routed through the capabilities explicitly enabled for the pilot;
+- investigation reports with trace drill-down when that route is enabled;
 - one approved base-branch policy;
-- one approved draft-PR or handoff workflow;
+- one approved draft or handoff workflow;
 - optional selected wiki pages only when the customer explicitly approves them;
 - no broad crawl of source, Jira, Confluence, chat, or drive content;
 - no production deployment permissions;
@@ -67,10 +68,10 @@ The pilot should grant only the permissions required for the selected workflow.
 Jira permissions:
 
 - read one project;
-- read one approved ticket class and required fields;
+- read the required fields for current-sprint work items;
 - write comments only if the pilot explicitly includes status comments;
 - no project administration;
-- no bulk issue access.
+- no unrelated bulk issue access.
 
 Repository permissions:
 
@@ -293,7 +294,7 @@ Each failure should name the blocked capability and the safe recovery path witho
 ## First implementation sequence
 
 1. Add workspace-scoped pilot configuration.
-2. Add repository, Jira project, ticket-class, and optional wiki allowlists.
+2. Add repository, Jira project, work-item-type, output-route, and optional wiki allowlists.
 3. Add connection records by ID with revocation state.
 4. Add a dry-run runner capability profile before live runner execution.
 5. Add hosted-core run events for side-effect intent and cancellation checks.

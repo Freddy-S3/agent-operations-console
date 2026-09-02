@@ -24,6 +24,26 @@ _Avoid_: Any collection of agents, autonomous magic
 A person responsible for deciding whether an agent run may proceed, needs intervention, or is complete.
 _Avoid_: User, supervisor
 
+**Work Item**:
+A tracked unit of requested work from an external planning system, such as a ticket, incident, or task.
+_Avoid_: Job, prompt
+
+**Intake Candidate**:
+An observed work-item event that has not yet passed trigger-scope and revalidation checks, and therefore has no agent or repository side effect.
+_Avoid_: Pending run, queued agent
+
+**Trigger Scope**:
+The policy-defined boundary that determines which work items may create an Agent Run based on planning state, readiness, relationships, and workspace rules.
+_Avoid_: Webhook filter, backlog scan
+
+**Related Work**:
+Work items connected by a dependency, hierarchy, duplicate relationship, or informational link that may affect scheduling or review.
+_Avoid_: Ticket family, shared backlog
+
+**Epic Context**:
+Explicitly approved goals, constraints, decisions, glossary, and evidence references shared by selected related work items.
+_Avoid_: Automatic history, inherited everything
+
 ## Delivery concepts
 
 **Human Gate**:

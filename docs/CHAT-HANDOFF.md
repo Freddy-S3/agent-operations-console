@@ -12,9 +12,9 @@ Operating rules:
 - Keep this chat focused on coordination; create a separate outcome chat for implementation.
 
 Recent commits:
+- 7f69a0c Document synthetic concierge rehearsal
+- 1b484fd Refresh concierge rehearsal handoff
 - d9b810c Document sprint-scoped intake trigger policy
-- 3772c5e Merge pull request #18 from Freddy-S3/codex/pilot-deployment-boundary
-- 144ee45 Merge pull request #17 from Freddy-S3/codex/pricing-analysis
 
 Working-tree status:
 - Clean

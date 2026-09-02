@@ -25,6 +25,9 @@ Current-sprint membership is sufficient readiness for that pilot, so a separate 
 The pilot may observe every current-sprint work item, including code, documentation, wiki, and investigation work.
 Intake scope is deliberately broader than code generation; the selected output route and available capability determine whether the candidate proceeds or pauses.
 
+An investigation candidate produces a concise evidence-linked report and, when an explicitly selected wiki connection exists, a companion wiki draft.
+The report is available for fast engineer review and trace drill-down; the wiki draft requires an operator approval before publication.
+
 Jira label write-back is an optional later paid-support customization, not the authority to run work.
 It is not part of the simple initial product; a later paid support profile may add an informational candidate or pause label after creating the candidate, but it must not use its own label as a second trigger.
 
@@ -156,7 +159,7 @@ The label-only rule in the current dry-run prototype is a local eligibility fixt
 | A current-sprint ticket requests documentation or wiki work. | Create an Intake Candidate and route it to the selected documentation capability; pause if the required wiki connection or permission is unavailable. | Non-code work can still benefit from an initial draft, but it must not be forced through a repository branch route. |
 | A ticket outside the first-pilot current sprint has an `agent-ready` label. | Keep it outside automatic intake. | A label alone must not bypass the pilot's sprint boundary. |
 | A later paid support profile enables label write-back. | Add the configured informational candidate or pause label after candidate creation, without using that label as a trigger. | The customer gets Jira visibility without changing the simple initial trigger or creating an automation loop. |
-| A current-sprint ticket requests investigation work. | Create an Intake Candidate and produce a concise evidence-linked investigation report with trace drill-down. | Engineers can scan the findings quickly while retaining access to the full research trace when needed. |
+| A current-sprint ticket requests investigation work. | Create an Intake Candidate, produce a concise evidence-linked investigation report with trace drill-down, and create a companion wiki draft when an explicitly selected wiki connection exists. | Engineers can scan the findings quickly while retaining access to the full research trace and a durable documentation draft. |
 | A support ticket is created directly in the active sprint. | Use the production-support profile if the workspace enabled it. | Support teams may need immediate preparation, but the profile must be explicit and bounded. |
 | A ticket enters the sprint and is immediately deleted. | Cancel the candidate before any side effect and retain only minimal audit metadata. | Deletion is a normal lifecycle event, not an agent failure. |
 | A ticket leaves the current or next sprint while queued. | Mark the candidate out of scope and do not create a run. | Reprioritization should not consume model or repository capacity. |
@@ -271,6 +274,7 @@ The first live rollout should enable one workspace, one Jira project, one reposi
 - A ticket outside the first-pilot current sprint does not run solely because it has an `agent-ready` label.
 - A later paid-support label write-back is idempotent and cannot create a self-triggering intake loop.
 - A current-sprint investigation ticket produces a concise report with evidence links and trace drill-down.
+- A current-sprint investigation ticket with a selected wiki connection produces a companion draft that cannot publish without operator approval.
 - A support-profile ticket created directly in the active sprint is admitted only when the workspace profile is enabled.
 - A deleted ticket is cancelled before branch or worktree creation.
 - A ticket removed from scope while queued is cancelled without a model call.

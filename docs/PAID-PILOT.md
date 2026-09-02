@@ -56,6 +56,7 @@ The restricted Faruk first pass prepares an initial draft and evidence bundle wi
 Code work uses the approved repository branch and worktree route.
 Documentation and wiki work use the selected documentation route, and pause visibly when the required page connection or permission is unavailable.
 Investigation work produces a concise report with findings, uncertainty, evidence references, and trace drill-down so the engineer can scan the result without reading the full conversation.
+When an explicitly selected wiki connection exists, the same work also produces a companion wiki draft that requires operator approval before publication.
 
 The simple initial product does not write labels back to Jira.
 Label write-back and other trigger customizations are later paid support options, and any such label improves visibility but is never the authority to start work or create a self-triggering hook.

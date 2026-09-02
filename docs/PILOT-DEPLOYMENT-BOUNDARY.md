@@ -17,6 +17,7 @@ The first external pilot is intentionally narrow:
 - one Jira project;
 - one repository;
 - current-sprint work items routed through the capabilities explicitly enabled for the pilot;
+- investigation reports with trace drill-down when that route is enabled;
 - one approved base-branch policy;
 - one approved draft or handoff workflow;
 - optional selected wiki pages only when the customer explicitly approves them;

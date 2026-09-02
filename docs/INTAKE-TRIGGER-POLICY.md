@@ -22,11 +22,11 @@ That is a validation sample, not a product-wide limit on how many tickets the sy
 The first paid pilot uses a current-sprint-only intake profile.
 Current-sprint membership is sufficient readiness for that pilot, so a separate `agent-ready` label is not required by default.
 
-The pilot may observe every current-sprint work item, including code, documentation, and wiki work.
+The pilot may observe every current-sprint work item, including code, documentation, wiki, and investigation work.
 Intake scope is deliberately broader than code generation; the selected output route and available capability determine whether the candidate proceeds or pauses.
 
-Jira label write-back is an optional setup customization, not the authority to run work.
-If enabled, the console may add an informational candidate or pause label after creating the candidate, but it must not use its own label as a second trigger.
+Jira label write-back is an optional later paid-support customization, not the authority to run work.
+It is not part of the simple initial product; a later paid support profile may add an informational candidate or pause label after creating the candidate, but it must not use its own label as a second trigger.
 
 An external event first creates an Intake Candidate.
 It does not create a branch, worktree, agent process, model call, or repository side effect until the candidate passes revalidation.
@@ -38,14 +38,13 @@ It does not create a branch, worktree, agent process, model call, or repository 
 This is the bounded profile for the first real customer pilot.
 
 - A work item is eligible for candidate creation only when it is assigned to the current sprint.
-- The profile is ticket-type agnostic at intake: code, documentation, and wiki work may all create candidates.
+- The profile is ticket-type agnostic at intake: code, documentation, wiki, and investigation work may all create candidates.
 - The candidate selects an output route and checks the required capability before any repository, model, or external-document side effect.
 - A missing capability pauses the candidate with a visible reason; it does not turn a documentation ticket into a code run or silently broaden access.
 - The pilot stays within one configured Jira project, the approved repository and selected wiki scope, the operator gate, and the workspace capacity limits.
 - A ticket in the next sprint or unscheduled backlog remains outside this pilot profile even if it has an `agent-ready` label.
 
-Basic customization of this profile is part of the initial setup engagement.
-It may be changed later without requiring a recurring support subscription.
+The initial product deliberately keeps this trigger simple; broader trigger customization is a later paid support option.
 
 ### Planned delivery
 
@@ -86,21 +85,22 @@ New provider events are recorded as ignored or paused candidates without startin
 For the first paid pilot, current-sprint membership is the authoritative readiness signal.
 The console should not require a separate Jira status or `agent-ready` label before creating an Intake Candidate.
 
-The setup may enable an optional, customer-named label write-back for visibility, such as a candidate-observed or candidate-paused label.
-Write-back must be idempotent, permission-scoped, auditable, and applied only after the candidate exists.
+The simple initial product does not write labels back to Jira.
+A later paid support profile may enable a customer-named label write-back for visibility, such as a candidate-observed or candidate-paused label.
+That write-back must be idempotent, permission-scoped, auditable, and applied only after the candidate exists.
 
 The write-back label is metadata for people and Jira views, not permission to start work.
 It must never be the only reason a candidate is created, and the console must not add a label that causes its own intake loop.
 
-The configuration surface remains intentionally open for later customers:
+The paid customization surface remains intentionally open for later customers:
 
 - the sprint window, including current-sprint-only or current-plus-next-sprint behavior;
-- included work-item types and output routes, such as code, documentation, or selected wiki pages;
+- included work-item types and output routes, such as code, documentation, selected wiki pages, or investigation reports;
 - optional Jira label write-back and the label names used;
 - a production-support profile with its own ready-state rule;
 - queue, concurrency, age, cost, and operator-approval limits.
 
-These are workspace setup choices, not promises that every future customer receives every route or an automatic subscription feature.
+These are paid support and customization choices, not part of the simple initial trigger or a promise that every customer receives every route.
 
 ## Candidate-first state flow
 
@@ -155,7 +155,8 @@ The label-only rule in the current dry-run prototype is a local eligibility fixt
 | A ticket is assigned to a sprint later than the next sprint. | Do not start automatic intake. | The ticket is planned but not near enough to justify model and branch work. |
 | A current-sprint ticket requests documentation or wiki work. | Create an Intake Candidate and route it to the selected documentation capability; pause if the required wiki connection or permission is unavailable. | Non-code work can still benefit from an initial draft, but it must not be forced through a repository branch route. |
 | A ticket outside the first-pilot current sprint has an `agent-ready` label. | Keep it outside automatic intake. | A label alone must not bypass the pilot's sprint boundary. |
-| Optional label write-back is enabled. | Add the configured informational candidate or pause label after candidate creation, without using that label as a trigger. | The customer gets Jira visibility without creating a self-triggering automation loop. |
+| A later paid support profile enables label write-back. | Add the configured informational candidate or pause label after candidate creation, without using that label as a trigger. | The customer gets Jira visibility without changing the simple initial trigger or creating an automation loop. |
+| A current-sprint ticket requests investigation work. | Create an Intake Candidate and produce a concise evidence-linked investigation report with trace drill-down. | Engineers can scan the findings quickly while retaining access to the full research trace when needed. |
 | A support ticket is created directly in the active sprint. | Use the production-support profile if the workspace enabled it. | Support teams may need immediate preparation, but the profile must be explicit and bounded. |
 | A ticket enters the sprint and is immediately deleted. | Cancel the candidate before any side effect and retain only minimal audit metadata. | Deletion is a normal lifecycle event, not an agent failure. |
 | A ticket leaves the current or next sprint while queued. | Mark the candidate out of scope and do not create a run. | Reprioritization should not consume model or repository capacity. |
@@ -259,7 +260,7 @@ The next implementation should add normalized sprint, relationship, work-item-ty
 
 The live hook should be implemented only after the provider adapter can distinguish ticket creation, sprint assignment, sprint removal, status changes, deletion or closure, link changes, and acceptance-criteria revisions.
 
-The first live rollout should enable one workspace, one Jira project, one repository for code routes, selected wiki scope for documentation routes, the current-sprint-only pilot profile, and one operator-approved runner.
+The first live rollout should enable one workspace, one Jira project, one repository for code routes, selected wiki scope for documentation routes, an investigation-report route, the current-sprint-only pilot profile, and one operator-approved runner.
 
 ## Required future tests
 
@@ -268,7 +269,8 @@ The first live rollout should enable one workspace, one Jira project, one reposi
 - A current-sprint documentation or wiki ticket creates a candidate, selects the correct route, and pauses visibly when its capability is unavailable.
 - A next-sprint ticket is eligible, while a later-sprint ticket is not.
 - A ticket outside the first-pilot current sprint does not run solely because it has an `agent-ready` label.
-- Optional label write-back is idempotent and cannot create a self-triggering intake loop.
+- A later paid-support label write-back is idempotent and cannot create a self-triggering intake loop.
+- A current-sprint investigation ticket produces a concise report with evidence links and trace drill-down.
 - A support-profile ticket created directly in the active sprint is admitted only when the workspace profile is enabled.
 - A deleted ticket is cancelled before branch or worktree creation.
 - A ticket removed from scope while queued is cancelled without a model call.

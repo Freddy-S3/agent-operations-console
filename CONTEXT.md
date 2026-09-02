@@ -41,12 +41,16 @@ A workspace-scoped choice of trigger window, included work-item types, output ro
 _Avoid_: Global default, customer fork
 
 **Output Route**:
-The kind of draft or handoff a work item receives, such as a code change, documentation update, wiki draft, or a paused capability request.
+The kind of draft or handoff a work item receives, such as a code change, documentation update, wiki draft, investigation report, or a paused capability request.
 _Avoid_: Ticket class, code path
 
 **Label Write-Back**:
 An optional Jira metadata update that makes candidate state visible to people without granting permission to start an Agent Run.
 _Avoid_: Trigger label, automation permission
+
+**Investigation Report**:
+A concise, evidence-linked summary of an investigation's question, scope, findings, uncertainty, and recommended next steps, with pointers into the detailed trace.
+_Avoid_: Transcript dump, unsupported conclusion
 
 **Related Work**:
 Work items connected by a dependency, hierarchy, duplicate relationship, or informational link that may affect scheduling or review.

@@ -29,7 +29,7 @@ The customer should understand that Faruk will configure and teach a practical o
 The pilot covers one Jira project, one operator workflow, and one repository for code work, with selected wiki pages for documentation work when explicitly connected.
 
 For the first pilot, automatic intake is current-sprint-only and ticket-type agnostic.
-Code, documentation, and wiki tickets in the current sprint may create Intake Candidates, but a candidate proceeds only when its output route, capability, dependency, budget, and approval checks pass.
+Code, documentation, wiki, and investigation tickets in the current sprint may create Intake Candidates, but a candidate proceeds only when its output route, capability, dependency, budget, and approval checks pass.
 This broadens the pilot's observation window; it does not promise that every ticket will produce a completed change.
 
 The pilot is designed for two to four weeks, depending on repository access, workflow complexity, and client availability.
@@ -55,9 +55,10 @@ The restricted Faruk first pass prepares an initial draft and evidence bundle wi
 
 Code work uses the approved repository branch and worktree route.
 Documentation and wiki work use the selected documentation route, and pause visibly when the required page connection or permission is unavailable.
+Investigation work produces a concise report with findings, uncertainty, evidence references, and trace drill-down so the engineer can scan the result without reading the full conversation.
 
-The setup may optionally enable an informational Jira label write-back after candidate creation.
-That label improves visibility but is never the authority to start work and must not create a self-triggering hook.
+The simple initial product does not write labels back to Jira.
+Label write-back and other trigger customizations are later paid support options, and any such label improves visibility but is never the authority to start work or create a self-triggering hook.
 
 The first pass may use a narrowly scoped bot identity to read the repository and create its isolated branch, but it must not have broad engineer credentials, merge rights, deployment rights, or production access.
 
@@ -67,13 +68,14 @@ Completed tickets can feed a weekly documentation skill that updates the custome
 
 This extension is intentionally bounded and experimental.
 
-### Setup customization included in the initial package
+### Future paid customization
 
-The initial setup includes a small, documented configuration surface rather than a fixed global workflow.
-It can select the intake window, included output routes, selected wiki scope, optional label write-back, support profile behavior, and queue or approval limits.
+The initial product keeps intake simple: current-sprint assignment is the trigger, and supported code, documentation, wiki, and investigation routes are evaluated from there.
 
-The first-pilot default is current sprint only and all ticket types that map to a supported route.
-Later customers may choose a narrower ticket filter, a current-plus-next-sprint window, or a support-specific ready state without requiring a recurring subscription.
+Additional trigger customization is reserved for paid support.
+It can select the intake window, included output routes, selected wiki scope, label write-back, support profile behavior, and queue or approval limits.
+
+Later customers may pay for a narrower ticket filter, a current-plus-next-sprint window, a support-specific ready state, or other workspace-specific behavior.
 
 Recurring support remains a separate future offer for validated ongoing value such as compatibility updates, skill updates, model-policy tuning, or operational support.
 

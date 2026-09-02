@@ -26,7 +26,11 @@ The customer should understand that Faruk will configure and teach a practical o
 
 ## Provisional scope
 
-The pilot covers one repository, one operator workflow, and one agreed class of software task.
+The pilot covers one Jira project, one operator workflow, and one repository for code work, with selected wiki pages for documentation work when explicitly connected.
+
+For the first pilot, automatic intake is current-sprint-only and ticket-type agnostic.
+Code, documentation, and wiki tickets in the current sprint may create Intake Candidates, but a candidate proceeds only when its output route, capability, dependency, budget, and approval checks pass.
+This broadens the pilot's observation window; it does not promise that every ticket will produce a completed change.
 
 The pilot is designed for two to four weeks, depending on repository access, workflow complexity, and client availability.
 
@@ -44,11 +48,18 @@ The pilot includes:
 
 ## Candidate asynchronous extension
 
-For a suitable low-risk task class, the pilot may validate an asynchronous Jira intake workflow alongside the concierge delivery.
+The pilot may validate an asynchronous Jira intake workflow alongside the concierge delivery.
 
-When an eligible ticket reaches the agreed ready state, the restricted Faruk first pass prepares an initial implementation and opens a draft PR.
+For this first pilot, current-sprint membership is the default readiness signal.
+The restricted Faruk first pass prepares an initial draft and evidence bundle without opening a PR automatically.
 
-The first pass may use a narrowly scoped bot identity to read the repository and create its isolated branch and draft PR, but it must not have broad engineer credentials, merge rights, deployment rights, or production access.
+Code work uses the approved repository branch and worktree route.
+Documentation and wiki work use the selected documentation route, and pause visibly when the required page connection or permission is unavailable.
+
+The setup may optionally enable an informational Jira label write-back after candidate creation.
+That label improves visibility but is never the authority to start work and must not create a self-triggering hook.
+
+The first pass may use a narrowly scoped bot identity to read the repository and create its isolated branch, but it must not have broad engineer credentials, merge rights, deployment rights, or production access.
 
 The engineer tests and reviews the first draft before invoking the permissioned Freddy second pass for corrections or continuation.
 
@@ -56,7 +67,17 @@ Completed tickets can feed a weekly documentation skill that updates the custome
 
 This extension is intentionally bounded and experimental.
 
-The pilot should measure time from ticket readiness to draft PR, usable first-draft rate, engineer rework, review cycles, documentation coverage, and model cost per ticket.
+### Setup customization included in the initial package
+
+The initial setup includes a small, documented configuration surface rather than a fixed global workflow.
+It can select the intake window, included output routes, selected wiki scope, optional label write-back, support profile behavior, and queue or approval limits.
+
+The first-pilot default is current sprint only and all ticket types that map to a supported route.
+Later customers may choose a narrower ticket filter, a current-plus-next-sprint window, or a support-specific ready state without requiring a recurring subscription.
+
+Recurring support remains a separate future offer for validated ongoing value such as compatibility updates, skill updates, model-policy tuning, or operational support.
+
+The pilot should measure time from current-sprint assignment to usable first draft, route-specific first-draft rate, engineer rework, review cycles, documentation coverage, and model cost per ticket.
 
 Model routing can use lower-cost models for ticket triage, context gathering, and routine first-pass work, reserving stronger models for difficult corrections, review findings, or recovery.
 
@@ -78,7 +99,7 @@ The fit call is free and limited to determining whether the workflow is appropri
 
 No unpaid implementation, repository audit, or custom architecture work is included in the fit call.
 
-If the pilot repeatedly expands beyond one repository workflow, pause and re-scope rather than silently absorbing additional work.
+If the pilot repeatedly expands beyond one Jira project, repository workflow, or explicitly selected wiki scope, pause and re-scope rather than silently absorbing additional work.
 
 ## Success measures
 

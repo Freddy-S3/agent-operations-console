@@ -36,6 +36,18 @@ _Avoid_: Pending run, queued agent
 The policy-defined boundary that determines which work items may create an Agent Run based on planning state, readiness, relationships, and workspace rules.
 _Avoid_: Webhook filter, backlog scan
 
+**Intake Profile**:
+A workspace-scoped choice of trigger window, included work-item types, output routes, label visibility, and safety limits.
+_Avoid_: Global default, customer fork
+
+**Output Route**:
+The kind of draft or handoff a work item receives, such as a code change, documentation update, wiki draft, or a paused capability request.
+_Avoid_: Ticket class, code path
+
+**Label Write-Back**:
+An optional Jira metadata update that makes candidate state visible to people without granting permission to start an Agent Run.
+_Avoid_: Trigger label, automation permission
+
 **Related Work**:
 Work items connected by a dependency, hierarchy, duplicate relationship, or informational link that may affect scheduling or review.
 _Avoid_: Ticket family, shared backlog

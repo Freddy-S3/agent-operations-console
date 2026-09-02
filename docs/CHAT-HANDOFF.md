@@ -1,8 +1,8 @@
-Continue the agent-operations-console project.
+Continue the agent-operations-console-trigger-policy project.
 
-Purpose: Resume consultancy economics and client validation
-Repository: C:\Users\faruk\Repo\agent-operations-console
-Current branch: codex/pricing-analysis
+Purpose: Resume coordination
+Repository: C:\Users\faruk\Repo\agent-operations-console-trigger-policy
+Current branch: codex/trigger-policy
 Read AGENTS.md before acting.
 No docs/PROJECT-CONTEXT.md exists yet; use docs/PROJECT-CONTEXT-TEMPLATE.md from the harness when creating one.
 
@@ -12,11 +12,11 @@ Operating rules:
 - Keep this chat focused on coordination; create a separate outcome chat for implementation.
 
 Recent commits:
-- 62e9b06 Refresh hands-off pricing handoff
-- 47a4276 Define higher ticket hands-off pricing package
-- 134b8b0 Refresh pricing coordination handoff
+- 5cbc1ca Document safe ticket intake trigger policy
+- 3772c5e Merge pull request #18 from Freddy-S3/codex/pilot-deployment-boundary
+- 144ee45 Merge pull request #17 from Freddy-S3/codex/pricing-analysis
 
 Working-tree status:
--  M docs/PRICING-ANALYSIS.md
+- Clean
 
 First action: read the repository guidance and report the current goals, blockers, and next recommended action.
